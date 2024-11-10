@@ -1,0 +1,28 @@
+[gd_scene load_steps=4 format=3 uid="uid://cd1xoal1kwi3v"]
+
+[ext_resource type="PackedScene" uid="uid://mtkepj6dl406" path="res://scenes/pop-it.tscn" id="1_jjml1"]
+[ext_resource type="VoxelGIData" uid="uid://duv0f8j3c4w82" path="res://scenes/main/main.VoxelGI_data.res" id="2_nu58n"]
+
+[sub_resource type="Environment" id="Environment_xu18t"]
+background_mode = 1
+background_color = Color(0.281187, 0.281187, 0.281187, 1)
+background_energy_multiplier = 0.25
+glow_enabled = true
+glow_bloom = 0.1
+glow_blend_mode = 1
+
+[node name="World" type="Node"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_xu18t")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.258819, 0.965926, 0, -0.965926, 0.258819, 0, 1, 0.225)
+size = 1.5
+
+[node name="PopIt" parent="." instance=ExtResource("1_jjml1")]
+
+[node name="VoxelGI" type="VoxelGI" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00299072, 0, -0.0314941)
+size = Vector3(1.29211, 1, 1.06299)
+data = ExtResource("2_nu58n")

@@ -10,7 +10,7 @@ var active_bubbles: PackedInt32Array = []
 var previous_bubbles: PackedInt32Array = []
 var current_level := 1
 var score := 0
-var total_levels := 20
+var total_levels := 35
 
 var level_config := {}
 var bubble_nodes: Array[Node3D] = []
@@ -40,6 +40,12 @@ var combo := 0
 
 var current_hue : float
 
+@onready var _10000: ColorRect = $"../CanvasLayer/Score_Display/10000"
+@onready var _1000: ColorRect = $"../CanvasLayer/Score_Display/1000"
+@onready var _100: ColorRect = $"../CanvasLayer/Score_Display/100"
+@onready var _10: ColorRect = $"../CanvasLayer/Score_Display/10"
+@onready var _1: ColorRect = $"../CanvasLayer/Score_Display/1"
+
 func _ready() -> void:
 	randomize()
 	current_hue = randf()
@@ -48,6 +54,20 @@ func _ready() -> void:
 	preload_pop_sounds()
 	reset_key_states()
 	start_new_round()
+
+func update_score_display(get_score: int) -> void:
+	var score_str = str(get_score).pad_zeros(5)
+	var tens_thousands = int(score_str[0])
+	var thousands = int(score_str[1])
+	var hundreds = int(score_str[2])
+	var tens = int(score_str[3])
+	var units = int(score_str[4])
+
+	_10000.material.set_shader_parameter("Number", tens_thousands)
+	_1000.material.set_shader_parameter("Number", thousands)
+	_100.material.set_shader_parameter("Number", hundreds)
+	_10.material.set_shader_parameter("Number", tens)
+	_1.material.set_shader_parameter("Number", units)
 
 func reset_key_states() -> void:
 	key_states.clear()
@@ -164,10 +184,14 @@ func _handle_key_press(index: int) -> void:
 	if not (index in popped_bubbles):
 
 		if index in active_bubbles:
-			score += 10 * current_level
+			var base_score = 15
+			var multiplier = get_multiplier()
+			var score_increase = base_score * multiplier
+			score += score_increase
+			
+			update_score_display(score)
 			update_combo(true)
 
-			
 			var new_active_bubbles := PackedInt32Array([])
 			for bubble in active_bubbles:
 				if bubble != index:
@@ -175,7 +199,6 @@ func _handle_key_press(index: int) -> void:
 			active_bubbles = new_active_bubbles
 			
 			popped_bubbles.append(index)
-			
 			play_random_sound(bubble_nodes[index].position)
 			
 			if index in active_tweens and active_tweens[index] != null:
@@ -183,7 +206,7 @@ func _handle_key_press(index: int) -> void:
 			
 			var tween = create_tween()
 			active_tweens[index] = tween
-			tween.tween_property(cap_mesh, "blend_shapes/popped", 1.0, 0.15)\
+			tween.tween_property(cap_mesh, "blend_shapes/popped", 1.0, 0.1)\
 				.set_ease(Tween.EASE_OUT)\
 				.set_trans(Tween.TRANS_CUBIC)
 			
@@ -191,21 +214,16 @@ func _handle_key_press(index: int) -> void:
 			material_tween.tween_callback(func():
 				transl_mat.roughness = 0.5
 				cap_mesh.material_override = transl_mat
-				pass
 			).set_delay(0.1)
 			
 			if active_bubbles.is_empty():
 				await get_tree().create_timer(0.2).timeout
 				advance_level()
 		elif not (index in previous_bubbles):
-			score -= 5
 			update_combo(false)
-		
-		print(score)
-		
+
 func _handle_key_release(index: int) -> void:
 	key_states[INPUT_KEYS[index]] = false
-
 
 func advance_level() -> void:
 	if is_transitioning:
@@ -213,7 +231,6 @@ func advance_level() -> void:
 		
 	is_transitioning = true
 	
-	# Clean up existing tweens
 	for tween in active_tweens.values():
 		if tween and tween.is_valid():
 			tween.kill()
@@ -223,12 +240,13 @@ func advance_level() -> void:
 	current_level = (current_level % total_levels) + 1
 	if current_level == 1:
 		score = 0
+		combo = 0
+		update_score_display(score)
 	print(current_level)
 	
 	var reset_tween = create_tween()
 	reset_tween.set_parallel(true)
 	
-	# Remove all lights before resetting
 	remove_existing_lights()
 	
 	for bubble_idx in range(bubble_nodes.size()):
@@ -238,7 +256,6 @@ func advance_level() -> void:
 				.set_ease(Tween.EASE_OUT)\
 				.set_trans(Tween.TRANS_CUBIC)
 			
-			# Reset materials
 			var default_material := StandardMaterial3D.new()
 			default_material.roughness = 0.5
 			default_material.albedo_color = Color(0.792, 0.808, 0.973)
@@ -247,7 +264,6 @@ func advance_level() -> void:
 	
 	await reset_tween.finished
 	
-	# Reset game state
 	reset_key_states()
 	popped_bubbles.clear()
 	is_transitioning = false
@@ -262,35 +278,48 @@ func play_level_completion_sound() -> void:
 		audio.play()
 		audio.finished.connect(func(): audio.queue_free())
 
-# Track the active combo tween to reset it each time we update combo scale
 var active_combo_tween: Tween = null
+
+func get_multiplier() -> int:
+	if combo > 100:
+		combo_label.set_modulate(Color(1, 1, 1))
+		return 10
+	elif combo > 55:
+		combo_label.set_modulate(Color(1.0, 0.6, 0.0))
+		return 8
+	elif combo > 30:
+		combo_label.set_modulate(Color(1.0, 1.0, 0.0))
+		return 4
+	elif combo > 20:
+		combo_label.set_modulate(Color(0.0, 1.0, 0.4))
+		return 3
+	elif combo > 5:
+		combo_label.set_modulate(Color(0.3, 0.6, 1))
+		return 2
+	else:
+		combo_label.set_modulate(Color(0.7, 0.7, 0.7))
+		return 1
 
 func update_combo(increase: bool) -> void:
 	if increase:
 		combo += 1
-		combo_label.set_text("Combo: " + str(combo))
+		combo_label.set_text(str(combo))
 		
-		# Clear any active tween to prevent overlapping scale animations
 		if active_combo_tween and active_combo_tween.is_valid():
-			active_combo_tween.kill()  # Stop the ongoing tween if exists
-
-		# Create a new tween for the combo scaling effect
+			active_combo_tween.kill()
+			
 		active_combo_tween = create_tween()
 		
-		# Reset to original scale before animating
 		combo_label.scale = Vector2.ONE
 		
-		# Scale up the combo label
 		active_combo_tween.tween_property(combo_label, "scale", Vector2(1.1, 1.1), 0.1)
 		active_combo_tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
 		
-		# Scale back down after a delay
 		active_combo_tween.tween_property(combo_label, "scale", Vector2.ONE, 0.1).set_delay(0.1)
 		active_combo_tween.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
 	else:
 		combo = 0
-		combo_label.set_text("Combo:")
-
+		combo_label.set_text("")
 
 func _handle_bubble_light_up(mesh: MeshInstance3D):
 	var tween = create_tween()
@@ -298,16 +327,8 @@ func _handle_bubble_light_up(mesh: MeshInstance3D):
 	var mesh_light = mesh.get_child(0)
 	
 	if mesh_light:
-		tween.tween_property(mesh_light, "light_energy", 1.75, 0.1)\
+		tween.tween_property(mesh_light, "light_energy", 2.15, 0.1)\
 			.set_ease(Tween.EASE_IN)\
-			.set_trans(Tween.TRANS_LINEAR)
-			
-func _handle_bubble_light_down(mesh_light: OmniLight3D):
-
-	if mesh_light:
-		var tween = create_tween()
-		tween.tween_property(mesh_light, "light_energy", 1.0, 0.2)\
-			.set_ease(Tween.EASE_OUT)\
 			.set_trans(Tween.TRANS_LINEAR)
 
 
@@ -318,22 +339,18 @@ func _set_key_Lights(mesh_instance: MeshInstance3D)-> void:
 	var light_pos = Vector3(mesh_instance.position.x,mesh_instance.position.y - 0.114, mesh_instance.position.z)
 	omni_light.position = light_pos
 	
-	omni_light.omni_range = 0.089
-	omni_light.omni_attenuation = 0.883
-	#omni_light.light_color = Color(0, 0.949, 1)
-	omni_light.light_color = Color.from_hsv(current_hue, 1, 1)  # Set initial color with HSV
+	omni_light.omni_range = 0.088
+	omni_light.omni_attenuation = 0.82
+	omni_light.light_color = Color.from_hsv(current_hue, 1, 1)
 	omni_light.light_energy = 0
 	
 	mesh_instance.add_child(omni_light)
-	
 
 func remove_existing_lights() -> void:
 	for bubble_idx in range(bubble_nodes.size()):
 		var bubble_mesh: MeshInstance3D = bubble_nodes[bubble_idx]
 		var bubble_mesh_instance = bubble_mesh.get_child(0)
 		
-		# Check if the mesh instance has a light child
 		for child in bubble_mesh_instance.get_children():
 			if child is OmniLight3D:
 				child.queue_free()
-				
