@@ -1,0 +1,30 @@
+[gd_scene load_steps=4 format=3 uid="uid://b8bbs67cs57v2"]
+
+[ext_resource type="PackedScene" uid="uid://c1w74vbjcunli" path="res://models/single pop.blend" id="1_6oy0h"]
+[ext_resource type="Script" path="res://scripts/single_pop.gd" id="2_38squ"]
+
+[sub_resource type="Environment" id="Environment_5r3r2"]
+background_mode = 1
+glow_enabled = true
+glow_bloom = 0.1
+glow_blend_mode = 1
+
+[node name="idk" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_5r3r2")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(-0.9345, -0.227834, 0.273498, 0, 0.768333, 0.64005, -0.355963, 0.598127, -0.718007, 0.110876, 0.20898, -0.251548)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.994788, -0.101969, 8.11951e-05, 0, 0.000796274, 1, -0.101969, 0.994787, -0.000792124, 0.0100343, 0.446996, -0.0147892)
+light_energy = 0.215
+
+[node name="single pop" parent="." instance=ExtResource("1_6oy0h")]
+script = ExtResource("2_38squ")
+
+[node name="1_004" parent="single pop/2" index="0"]
+blend_shapes/popped = 0.02667
+
+[editable path="single pop"]

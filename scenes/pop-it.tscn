@@ -1,0 +1,31 @@
+[gd_scene load_steps=5 format=3 uid="uid://mtkepj6dl406"]
+
+[ext_resource type="PackedScene" uid="uid://dqo2dmq5e7cdq" path="res://models/pop-it-3d.blend" id="1_esr1d"]
+[ext_resource type="Script" path="res://scripts/popit.gd" id="2_ier21"]
+[ext_resource type="AudioStream" uid="uid://bnhilvdcj540f" path="res://sounds/Rush Hour Arcade.mp3" id="3_7o632"]
+[ext_resource type="Material" uid="uid://biid58nhbbja7" path="res://models/Material.tres" id="3_sllnc"]
+
+[node name="PopIt" type="Node3D"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Combo_Label" type="Label" parent="CanvasLayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -109.0
+offset_top = 164.0
+offset_right = 109.0
+offset_bottom = 240.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 55
+text = "Combo: "
+
+[node name="pop-it-3d" parent="." instance=ExtResource("1_esr1d")]
+script = ExtResource("2_ier21")
+transl_mat = ExtResource("3_sllnc")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_7o632")
+
+[editable path="pop-it-3d"]
