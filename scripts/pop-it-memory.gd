@@ -3,15 +3,22 @@ extends Node3D
 const INPUT_KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
 const MAX_SOUND_HISTORY = 2
 const START_BUBBLES = 3
-const MAX_BUBBLES = 10
+const MAX_BUBBLES = 8
+
+var game_over := false
+var progress_tween: Tween
+
+
+@onready var time_bar: ProgressBar = $"../CanvasLayer/Time_Bar"
+
+var base_decrease_time := 15.0
+var difficulty_multiplier := 1.0
 
 var key_states := {}
 var active_bubbles: PackedInt32Array = []
 var previous_bubbles: PackedInt32Array = []
 var current_level := 1
 var score := 0
-var total_levels := 35
-
 var level_config := {}
 var bubble_nodes: Array[Node3D] = []
 var sound_pool: Array[AudioStream] = []
@@ -40,11 +47,20 @@ var combo := 0
 
 var current_hue : float
 
+@onready var level_100: ColorRect = $"../CanvasLayer/Score_Display/level_100"
+@onready var level_10: ColorRect = $"../CanvasLayer/Score_Display/level_10"
+@onready var level_1: ColorRect = $"../CanvasLayer/Score_Display/level_1"
+
+@onready var _1000000: ColorRect = $"../CanvasLayer/Score_Display/1000000"
+@onready var _100000: ColorRect = $"../CanvasLayer/Score_Display/100000"
 @onready var _10000: ColorRect = $"../CanvasLayer/Score_Display/10000"
 @onready var _1000: ColorRect = $"../CanvasLayer/Score_Display/1000"
 @onready var _100: ColorRect = $"../CanvasLayer/Score_Display/100"
 @onready var _10: ColorRect = $"../CanvasLayer/Score_Display/10"
 @onready var _1: ColorRect = $"../CanvasLayer/Score_Display/1"
+
+@onready var c_mult_10: ColorRect = $"../CanvasLayer/Score_Display/c_mult_10"
+@onready var c_mult_1: ColorRect = $"../CanvasLayer/Score_Display/c_mult_1"
 
 func _ready() -> void:
 	randomize()
@@ -53,22 +69,73 @@ func _ready() -> void:
 	generate_level_config()
 	preload_pop_sounds()
 	reset_key_states()
+	setup_progress_bar()
 	start_new_round()
 
-func update_score_display(get_score: int) -> void:
-	var score_str = str(get_score).pad_zeros(5)
-	var tens_thousands = int(score_str[0])
-	var thousands = int(score_str[1])
-	var hundreds = int(score_str[2])
-	var tens = int(score_str[3])
-	var units = int(score_str[4])
+func setup_progress_bar() -> void:
+	time_bar.min_value = 0
+	time_bar.max_value = 100  # Increased from 60 for more strategic gameplay
+	time_bar.value = 100
+	_start_decrease_tween()
+	
+func _start_decrease_tween() -> void:
+	if progress_tween:
+		progress_tween.kill()
+	
+	var decrease_time = base_decrease_time / pow(difficulty_multiplier, 0.7)  # Modified difficulty scaling
+	progress_tween = create_tween()
+	progress_tween.tween_property(time_bar, "value", 0, decrease_time)
+	progress_tween.set_trans(Tween.TRANS_LINEAR)
 
+func _process(_delta: float) -> void:
+	if time_bar.value <= 0 and not game_over:
+		game_over = true
+		handle_game_over()
+
+func handle_game_over() -> void:
+	print("Game Over! Score: ", score)
+	await get_tree().create_timer(1.0).timeout
+	get_tree().reload_current_scene()
+	
+func _update_score_display(get_score: int) -> void:
+	var score_str = str(get_score).pad_zeros(7)
+	
+	var millions = int(score_str[0])
+	var hundreds_thousands = int(score_str[1])
+	var tens_thousands = int(score_str[2])
+	var thousands = int(score_str[3])
+	var hundreds = int(score_str[4])
+	var tens = int(score_str[5])
+	var units = int(score_str[6])
+
+	_1000000.material.set_shader_parameter("Number", millions)
+	_100000.material.set_shader_parameter("Number", hundreds_thousands)
 	_10000.material.set_shader_parameter("Number", tens_thousands)
 	_1000.material.set_shader_parameter("Number", thousands)
 	_100.material.set_shader_parameter("Number", hundreds)
 	_10.material.set_shader_parameter("Number", tens)
 	_1.material.set_shader_parameter("Number", units)
 
+func _update_level_display(get_level: int) -> void:
+	var level_str = str(get_level).pad_zeros(3)
+	
+	var hundreds = int(level_str[0])
+	var tens = int(level_str[1])
+	var units = int(level_str[2])
+
+	level_100.material.set_shader_parameter("Number", hundreds)
+	level_10.material.set_shader_parameter("Number", tens)
+	level_1.material.set_shader_parameter("Number", units)
+	
+func _update_combo_multiplier_display(get_combo: int) -> void:
+	var combo_m_str = str(get_combo).pad_zeros(2)
+	
+	var tens = int(combo_m_str[0])
+	var units = int(combo_m_str[1])
+
+	c_mult_10.material.set_shader_parameter("Number", tens)
+	c_mult_1.material.set_shader_parameter("Number", units)
+	
 func reset_key_states() -> void:
 	key_states.clear()
 	current_pressed_keys = 0
@@ -105,14 +172,22 @@ func preload_pop_sounds() -> void:
 		sound_pool.append(load(sound_path))
 
 func generate_level_config() -> void:
-	for level in range(1, total_levels + 1):
-		var bubbles := START_BUBBLES + roundi(((MAX_BUBBLES - START_BUBBLES) * float(level - 1)) / float(total_levels - 1))
+	for level in range(1, 101):
+		var bubbles := START_BUBBLES + roundi(((MAX_BUBBLES - START_BUBBLES) * float(level - 1)) / 99.0)
 		bubbles = clampi(bubbles, START_BUBBLES, MAX_BUBBLES)
-		var spacing := maxi(roundi(3.0 - float(level) / (float(total_levels) / 10.0)), 1)
+		var spacing := maxi(roundi(2.0 - float(level) / 10.0), 1)
 		level_config[level] = {"bubbles": bubbles, "spacing": spacing}
 
+func get_level_config(level: int) -> Dictionary:
+	if not level_config.has(level):
+		var bubbles := START_BUBBLES + roundi(((MAX_BUBBLES - START_BUBBLES) * float(level - 1)) / 99.0)
+		bubbles = clampi(bubbles, START_BUBBLES, MAX_BUBBLES)
+		var spacing := maxi(roundi(2.0 - float(level) / 10.0), 1)
+		level_config[level] = {"bubbles": bubbles, "spacing": spacing}
+	return level_config[level]
+	
 func get_valid_bubble_positions() -> PackedInt32Array:
-	var current_config: Dictionary = level_config[current_level]
+	var current_config: Dictionary = get_level_config(current_level)
 	var valid_positions := PackedInt32Array([])
 	var spacing: int = current_config["spacing"]
 	var iteration_count := 0
@@ -164,6 +239,9 @@ func light_up_bubble(index: int) -> void:
 	_handle_bubble_light_up(bubble_mesh_instance)
 
 func _unhandled_key_input(event: InputEvent) -> void:
+	if game_over:
+		return
+		
 	for i in INPUT_KEYS.size():
 		var key: String = INPUT_KEYS[i]
 		if event.is_action_pressed(key) and not key_states[key]:
@@ -175,22 +253,27 @@ func _unhandled_key_input(event: InputEvent) -> void:
 			_handle_key_release(i)
 
 func _handle_key_press(index: int) -> void:
-	if is_transitioning or index >= bubble_nodes.size():
+	if game_over or is_transitioning or index >= bubble_nodes.size():
 		return
 		
 	key_states[INPUT_KEYS[index]] = true
 	var cap_mesh: MeshInstance3D = bubble_nodes[index].get_child(0)
 	
 	if not (index in popped_bubbles):
-
 		if index in active_bubbles:
-			var base_score = 15
+			var base_score = 100
 			var multiplier = get_multiplier()
 			var score_increase = base_score * multiplier
 			score += score_increase
 			
-			update_score_display(score)
-			update_combo(true)
+			# Modified time bonus based on combo
+			var time_bonus = 2.0 + (combo * 0.1)  # More time bonus for higher combos
+			time_bonus = min(time_bonus, 5.0)  # Cap the maximum time bonus
+			time_bar.value = min(time_bar.value + time_bonus, time_bar.max_value)
+			
+			_update_score_display(score)
+			_update_combo(true)
+			_update_combo_multiplier_display(multiplier)
 
 			var new_active_bubbles := PackedInt32Array([])
 			for bubble in active_bubbles:
@@ -220,16 +303,24 @@ func _handle_key_press(index: int) -> void:
 				await get_tree().create_timer(0.2).timeout
 				advance_level()
 		elif not (index in previous_bubbles):
-			update_combo(false)
+			_update_combo(false)
+			_update_combo_multiplier_display(1)
 
 func _handle_key_release(index: int) -> void:
 	key_states[INPUT_KEYS[index]] = false
 
 func advance_level() -> void:
-	if is_transitioning:
+	if is_transitioning or game_over:
 		return
-		
+	
 	is_transitioning = true
+	
+	difficulty_multiplier += 0.03  # Reduced from 0.05 for smoother difficulty progression
+	
+	var time_bonus = time_bar.value * 0.3  # Reduced from 0.5 for better balance
+	time_bar.value = min(time_bar.value + time_bonus, time_bar.max_value)
+	
+	_start_decrease_tween()
 	
 	for tween in active_tweens.values():
 		if tween and tween.is_valid():
@@ -237,12 +328,8 @@ func advance_level() -> void:
 	active_tweens.clear()
 	
 	play_level_completion_sound()
-	current_level = (current_level % total_levels) + 1
-	if current_level == 1:
-		score = 0
-		combo = 0
-		update_score_display(score)
-	print(current_level)
+	current_level += 1
+	_update_level_display(current_level)
 	
 	var reset_tween = create_tween()
 	reset_tween.set_parallel(true)
@@ -252,7 +339,7 @@ func advance_level() -> void:
 	for bubble_idx in range(bubble_nodes.size()):
 		var cap_mesh: MeshInstance3D = bubble_nodes[bubble_idx].get_child(0)
 		if cap_mesh:
-			reset_tween.tween_property(cap_mesh, "blend_shapes/popped", 0.0, 0.2)\
+			reset_tween.tween_property(cap_mesh, "blend_shapes/popped", 0.0, 0.1)\
 				.set_ease(Tween.EASE_OUT)\
 				.set_trans(Tween.TRANS_CUBIC)
 			
@@ -281,26 +368,26 @@ func play_level_completion_sound() -> void:
 var active_combo_tween: Tween = null
 
 func get_multiplier() -> int:
-	if combo > 100:
+	if combo > 120:  # Modified combo thresholds
 		combo_label.set_modulate(Color(1, 1, 1))
-		return 10
-	elif combo > 55:
+		return 12
+	elif combo > 80:
 		combo_label.set_modulate(Color(1.0, 0.6, 0.0))
 		return 8
-	elif combo > 30:
+	elif combo > 50:
 		combo_label.set_modulate(Color(1.0, 1.0, 0.0))
-		return 4
-	elif combo > 20:
+		return 6
+	elif combo > 30:
 		combo_label.set_modulate(Color(0.0, 1.0, 0.4))
-		return 3
-	elif combo > 5:
+		return 4
+	elif combo > 10:
 		combo_label.set_modulate(Color(0.3, 0.6, 1))
 		return 2
 	else:
 		combo_label.set_modulate(Color(0.7, 0.7, 0.7))
 		return 1
 
-func update_combo(increase: bool) -> void:
+func _update_combo(increase: bool) -> void:
 	if increase:
 		combo += 1
 		combo_label.set_text(str(combo))
@@ -327,7 +414,7 @@ func _handle_bubble_light_up(mesh: MeshInstance3D):
 	var mesh_light = mesh.get_child(0)
 	
 	if mesh_light:
-		tween.tween_property(mesh_light, "light_energy", 2.15, 0.1)\
+		tween.tween_property(mesh_light, "light_energy", 2.15, 0.15)\
 			.set_ease(Tween.EASE_IN)\
 			.set_trans(Tween.TRANS_LINEAR)
 

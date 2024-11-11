@@ -1,0 +1,381 @@
+[gd_scene load_steps=19 format=3 uid="uid://mtkepj6dl406"]
+
+[ext_resource type="PackedScene" uid="uid://dqo2dmq5e7cdq" path="res://models/pop-it-3d.blend" id="1_esr1d"]
+[ext_resource type="Shader" uid="uid://bwrhhx067mqoh" path="res://shaders/7-segment_display.tres" id="1_kven8"]
+[ext_resource type="PackedScene" uid="uid://b20113doycxsj" path="res://scenes/time_bar.tscn" id="2_dyksv"]
+[ext_resource type="AudioStream" uid="uid://bnhilvdcj540f" path="res://sounds/Rush Hour Arcade.mp3" id="3_7o632"]
+[ext_resource type="Material" uid="uid://biid58nhbbja7" path="res://materials/Material.tres" id="3_sllnc"]
+[ext_resource type="Script" path="res://scripts/popit-arcade2.gd" id="4_j1rt8"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i5waq"]
+shader = ExtResource("1_kven8")
+shader_parameter/SkewAngle = 0.0
+shader_parameter/Size = 32.0
+shader_parameter/SegmentWidth = 0.15
+shader_parameter/SegmentOffsetRatio = 0.5
+shader_parameter/Number = 0
+shader_parameter/ON = true
+shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
+shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
+shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n16dm"]
+shader = ExtResource("1_kven8")
+shader_parameter/SkewAngle = 0.0
+shader_parameter/Size = 32.0
+shader_parameter/SegmentWidth = 0.15
+shader_parameter/SegmentOffsetRatio = 0.5
+shader_parameter/Number = 0
+shader_parameter/ON = true
+shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
+shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
+shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3wsk0"]
+shader = ExtResource("1_kven8")
+shader_parameter/SkewAngle = 0.0
+shader_parameter/Size = 32.0
+shader_parameter/SegmentWidth = 0.15
+shader_parameter/SegmentOffsetRatio = 0.5
+shader_parameter/Number = 1
+shader_parameter/ON = true
+shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
+shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
+shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_du3sk"]
+shader = ExtResource("1_kven8")
+shader_parameter/SkewAngle = 0.0
+shader_parameter/Size = 32.0
+shader_parameter/SegmentWidth = 0.15
+shader_parameter/SegmentOffsetRatio = 0.5
+shader_parameter/Number = 0
+shader_parameter/ON = true
+shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
+shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
+shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c2qyv"]
+shader = ExtResource("1_kven8")
+shader_parameter/SkewAngle = 0.0
+shader_parameter/Size = 32.0
+shader_parameter/SegmentWidth = 0.15
+shader_parameter/SegmentOffsetRatio = 0.5
+shader_parameter/Number = 1
+shader_parameter/ON = true
+shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
+shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
+shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n2uq6"]
+shader = ExtResource("1_kven8")
+shader_parameter/SkewAngle = 0.0
+shader_parameter/Size = 32.0
+shader_parameter/SegmentWidth = 0.15
+shader_parameter/SegmentOffsetRatio = 0.5
+shader_parameter/Number = 0
+shader_parameter/ON = true
+shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
+shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
+shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w8de3"]
+shader = ExtResource("1_kven8")
+shader_parameter/SkewAngle = 0.0
+shader_parameter/Size = 32.0
+shader_parameter/SegmentWidth = 0.15
+shader_parameter/SegmentOffsetRatio = 0.5
+shader_parameter/Number = 0
+shader_parameter/ON = true
+shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
+shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
+shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_onfj2"]
+shader = ExtResource("1_kven8")
+shader_parameter/SkewAngle = 0.0
+shader_parameter/Size = 32.0
+shader_parameter/SegmentWidth = 0.15
+shader_parameter/SegmentOffsetRatio = 0.5
+shader_parameter/Number = 0
+shader_parameter/ON = true
+shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
+shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
+shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mvqdh"]
+shader = ExtResource("1_kven8")
+shader_parameter/SkewAngle = 0.0
+shader_parameter/Size = 32.0
+shader_parameter/SegmentWidth = 0.15
+shader_parameter/SegmentOffsetRatio = 0.5
+shader_parameter/Number = 0
+shader_parameter/ON = true
+shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
+shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
+shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m2en8"]
+shader = ExtResource("1_kven8")
+shader_parameter/SkewAngle = 0.0
+shader_parameter/Size = 32.0
+shader_parameter/SegmentWidth = 0.15
+shader_parameter/SegmentOffsetRatio = 0.5
+shader_parameter/Number = 0
+shader_parameter/ON = true
+shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
+shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
+shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tswex"]
+shader = ExtResource("1_kven8")
+shader_parameter/SkewAngle = 0.0
+shader_parameter/Size = 32.0
+shader_parameter/SegmentWidth = 0.15
+shader_parameter/SegmentOffsetRatio = 0.5
+shader_parameter/Number = 0
+shader_parameter/ON = true
+shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
+shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
+shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7ejb1"]
+shader = ExtResource("1_kven8")
+shader_parameter/SkewAngle = 0.0
+shader_parameter/Size = 32.0
+shader_parameter/SegmentWidth = 0.15
+shader_parameter/SegmentOffsetRatio = 0.5
+shader_parameter/Number = 0
+shader_parameter/ON = true
+shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
+shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
+shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
+
+[node name="PopIt" type="Node3D"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Combo_Label" type="Label" parent="CanvasLayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -109.0
+offset_top = 143.2
+offset_right = 109.0
+offset_bottom = 219.2
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 55
+horizontal_alignment = 1
+
+[node name="Score_Display" type="Node2D" parent="CanvasLayer"]
+
+[node name="level_100" type="ColorRect" parent="CanvasLayer/Score_Display"]
+material = SubResource("ShaderMaterial_i5waq")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 711.0
+offset_top = 294.0
+offset_right = 751.0
+offset_bottom = 334.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="level_10" type="ColorRect" parent="CanvasLayer/Score_Display"]
+material = SubResource("ShaderMaterial_n16dm")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 743.0
+offset_top = 294.0
+offset_right = 783.0
+offset_bottom = 334.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="level_1" type="ColorRect" parent="CanvasLayer/Score_Display"]
+material = SubResource("ShaderMaterial_3wsk0")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 775.0
+offset_top = 294.0
+offset_right = 815.0
+offset_bottom = 334.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="c_mult_10" type="ColorRect" parent="CanvasLayer/Score_Display"]
+material = SubResource("ShaderMaterial_du3sk")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 1123.0
+offset_top = 294.0
+offset_right = 1163.0
+offset_bottom = 334.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="c_mult_1" type="ColorRect" parent="CanvasLayer/Score_Display"]
+material = SubResource("ShaderMaterial_c2qyv")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 1155.0
+offset_top = 294.0
+offset_right = 1195.0
+offset_bottom = 334.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="1000000" type="ColorRect" parent="CanvasLayer/Score_Display"]
+material = SubResource("ShaderMaterial_n2uq6")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 850.0
+offset_top = 294.0
+offset_right = 890.0
+offset_bottom = 334.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="100000" type="ColorRect" parent="CanvasLayer/Score_Display"]
+material = SubResource("ShaderMaterial_w8de3")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 882.0
+offset_top = 294.0
+offset_right = 922.0
+offset_bottom = 334.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="10000" type="ColorRect" parent="CanvasLayer/Score_Display"]
+material = SubResource("ShaderMaterial_onfj2")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 914.0
+offset_top = 294.0
+offset_right = 954.0
+offset_bottom = 334.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="1000" type="ColorRect" parent="CanvasLayer/Score_Display"]
+material = SubResource("ShaderMaterial_mvqdh")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 946.0
+offset_top = 294.0
+offset_right = 986.0
+offset_bottom = 334.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="100" type="ColorRect" parent="CanvasLayer/Score_Display"]
+material = SubResource("ShaderMaterial_m2en8")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 978.0
+offset_top = 294.0
+offset_right = 1018.0
+offset_bottom = 334.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="10" type="ColorRect" parent="CanvasLayer/Score_Display"]
+material = SubResource("ShaderMaterial_tswex")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 1010.0
+offset_top = 294.0
+offset_right = 1050.0
+offset_bottom = 334.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="1" type="ColorRect" parent="CanvasLayer/Score_Display"]
+material = SubResource("ShaderMaterial_7ejb1")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 1042.0
+offset_top = 294.0
+offset_right = 1082.0
+offset_bottom = 334.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Time_Bar" parent="CanvasLayer" instance=ExtResource("2_dyksv")]
+
+[node name="pop-it-3d" parent="." instance=ExtResource("1_esr1d")]
+script = ExtResource("4_j1rt8")
+transl_mat = ExtResource("3_sllnc")
+
+[node name="1_001" parent="pop-it-3d/1" index="0"]
+gi_mode = 2
+
+[node name="1_004" parent="pop-it-3d/2" index="0"]
+gi_mode = 2
+
+[node name="1_003" parent="pop-it-3d/3" index="0"]
+gi_mode = 2
+
+[node name="1_008" parent="pop-it-3d/4" index="0"]
+gi_mode = 2
+
+[node name="1_010" parent="pop-it-3d/5" index="0"]
+gi_mode = 2
+
+[node name="1_012" parent="pop-it-3d/6" index="0"]
+gi_mode = 2
+
+[node name="1_014" parent="pop-it-3d/7" index="0"]
+gi_mode = 2
+
+[node name="1_016" parent="pop-it-3d/8" index="0"]
+gi_mode = 2
+
+[node name="1_018" parent="pop-it-3d/9" index="0"]
+gi_mode = 2
+
+[node name="1_020" parent="pop-it-3d/10" index="0"]
+gi_mode = 2
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_7o632")
+autoplay = true
+bus = &"BGM"
+
+[editable path="pop-it-3d"]
