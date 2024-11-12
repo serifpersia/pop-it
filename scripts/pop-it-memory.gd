@@ -9,7 +9,11 @@ var game_over := false
 var progress_tween: Tween
 
 
+
 @onready var time_bar: ProgressBar = $"../CanvasLayer/Time_Bar"
+@onready var finish_level_scene: Control = $"../FinishLevelScene"
+@onready var canvas_layer: CanvasLayer = $"../CanvasLayer"
+@onready var high_score: Label = $"../FinishLevelScene/MarginContainer/HBoxContainer/VBoxContainer/Score"
 
 var base_decrease_time := 15.0
 var difficulty_multiplier := 1.0
@@ -74,7 +78,7 @@ func _ready() -> void:
 
 func setup_progress_bar() -> void:
 	time_bar.min_value = 0
-	time_bar.max_value = 100  # Increased from 60 for more strategic gameplay
+	time_bar.max_value = 100
 	time_bar.value = 100
 	_start_decrease_tween()
 	
@@ -82,7 +86,7 @@ func _start_decrease_tween() -> void:
 	if progress_tween:
 		progress_tween.kill()
 	
-	var decrease_time = base_decrease_time / pow(difficulty_multiplier, 0.7)  # Modified difficulty scaling
+	var decrease_time = base_decrease_time / pow(difficulty_multiplier, 0.7)
 	progress_tween = create_tween()
 	progress_tween.tween_property(time_bar, "value", 0, decrease_time)
 	progress_tween.set_trans(Tween.TRANS_LINEAR)
@@ -93,10 +97,14 @@ func _process(_delta: float) -> void:
 		handle_game_over()
 
 func handle_game_over() -> void:
-	print("Game Over! Score: ", score)
 	await get_tree().create_timer(1.0).timeout
-	get_tree().reload_current_scene()
-	
+	hide()
+	canvas_layer.hide()
+	finish_level_scene.show()
+	high_score.text = "High Score: " + str(score)
+	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+	get_tree().paused = true
+
 func _update_score_display(get_score: int) -> void:
 	var score_str = str(get_score).pad_zeros(7)
 	
@@ -161,6 +169,7 @@ func play_random_sound(mesh_position: Vector3) -> void:
 
 	var audio := AudioStreamPlayer3D.new()
 	audio.stream = sound_pool[sound_idx]
+	audio.set_bus("SFX")
 	add_child(audio)
 	audio.position = mesh_position
 	audio.play()
@@ -266,9 +275,8 @@ func _handle_key_press(index: int) -> void:
 			var score_increase = base_score * multiplier
 			score += score_increase
 			
-			# Modified time bonus based on combo
-			var time_bonus = 2.0 + (combo * 0.1)  # More time bonus for higher combos
-			time_bonus = min(time_bonus, 5.0)  # Cap the maximum time bonus
+			var time_bonus = 2.0 + (combo * 0.1)
+			time_bonus = min(time_bonus, 5.0)
 			time_bar.value = min(time_bar.value + time_bonus, time_bar.max_value)
 			
 			_update_score_display(score)
@@ -315,9 +323,9 @@ func advance_level() -> void:
 	
 	is_transitioning = true
 	
-	difficulty_multiplier += 0.03  # Reduced from 0.05 for smoother difficulty progression
+	difficulty_multiplier += 0.03
 	
-	var time_bonus = time_bar.value * 0.3  # Reduced from 0.5 for better balance
+	var time_bonus = time_bar.value * 0.3
 	time_bar.value = min(time_bar.value + time_bonus, time_bar.max_value)
 	
 	_start_decrease_tween()
@@ -360,6 +368,7 @@ func play_level_completion_sound() -> void:
 	if level_completion_sound:
 		var audio := AudioStreamPlayer3D.new()
 		audio.stream = level_completion_sound
+		audio.set_bus("SFX")
 		add_child(audio)
 		audio.position = Vector3(-0.3, 0.5, 0)
 		audio.play()
@@ -368,7 +377,7 @@ func play_level_completion_sound() -> void:
 var active_combo_tween: Tween = null
 
 func get_multiplier() -> int:
-	if combo > 120:  # Modified combo thresholds
+	if combo > 120:
 		combo_label.set_modulate(Color(1, 1, 1))
 		return 12
 	elif combo > 80:

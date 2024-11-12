@@ -1,9 +1,10 @@
-[gd_scene load_steps=19 format=3 uid="uid://mtkepj6dl406"]
+[gd_scene load_steps=20 format=3 uid="uid://mtkepj6dl406"]
 
+[ext_resource type="Script" path="res://scripts/bgm_control.gd" id="1_dack5"]
 [ext_resource type="PackedScene" uid="uid://dqo2dmq5e7cdq" path="res://models/pop-it-3d.blend" id="1_esr1d"]
 [ext_resource type="Shader" uid="uid://bwrhhx067mqoh" path="res://shaders/7-segment_display.tres" id="1_kven8"]
 [ext_resource type="PackedScene" uid="uid://b20113doycxsj" path="res://scenes/time_bar.tscn" id="2_dyksv"]
-[ext_resource type="AudioStream" uid="uid://bnhilvdcj540f" path="res://sounds/Rush Hour Arcade.mp3" id="3_7o632"]
+[ext_resource type="PackedScene" uid="uid://8rdpyfdcv1su" path="res://scenes/menu_scenes/finish_level_scene.tscn" id="2_j7jbe"]
 [ext_resource type="Material" uid="uid://biid58nhbbja7" path="res://materials/Material.tres" id="3_sllnc"]
 [ext_resource type="Script" path="res://scripts/popit-arcade2.gd" id="4_j1rt8"]
 
@@ -151,7 +152,11 @@ shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
 shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
 shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
 
-[node name="PopIt" type="Node3D"]
+[node name="popit_arcade_plus" type="Node3D"]
+script = ExtResource("1_dack5")
+
+[node name="FinishLevelScene" parent="." instance=ExtResource("2_j7jbe")]
+visible = false
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -374,9 +379,5 @@ gi_mode = 2
 [node name="1_020" parent="pop-it-3d/10" index="0"]
 gi_mode = 2
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
-stream = ExtResource("3_7o632")
-autoplay = true
-bus = &"BGM"
-
+[editable path="FinishLevelScene"]
 [editable path="pop-it-3d"]

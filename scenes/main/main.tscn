@@ -1,7 +1,8 @@
-[gd_scene load_steps=4 format=3 uid="uid://cd1xoal1kwi3v"]
+[gd_scene load_steps=5 format=3 uid="uid://cd1xoal1kwi3v"]
 
-[ext_resource type="PackedScene" uid="uid://borea6tx3cxpq" path="res://scenes/pop-it-fidget.tscn" id="2_3u32g"]
+[ext_resource type="Script" path="res://scripts/main.gd" id="1_bebkt"]
 [ext_resource type="VoxelGIData" uid="uid://duv0f8j3c4w82" path="res://scenes/main/main.VoxelGI_data.res" id="2_nu58n"]
+[ext_resource type="PackedScene" uid="uid://bfsjym2svavnd" path="res://scenes/menu_scenes/pause_menu.tscn" id="3_tookn"]
 
 [sub_resource type="Environment" id="Environment_xu18t"]
 background_mode = 1
@@ -12,6 +13,9 @@ glow_bloom = 0.1
 glow_blend_mode = 1
 
 [node name="World" type="Node"]
+script = ExtResource("1_bebkt")
+
+[node name="Pause" parent="." instance=ExtResource("3_tookn")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_xu18t")
@@ -24,5 +28,3 @@ size = 1.5
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00299072, 0, -0.0314941)
 size = Vector3(1.29211, 1, 1.06299)
 data = ExtResource("2_nu58n")
-
-[node name="PopIt" parent="." instance=ExtResource("2_3u32g")]

@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=3 uid="uid://can6od2otra6s"]
+
+[ext_resource type="Theme" uid="uid://yys17mde0tii" path="res://themes/buttons_theme.tres" id="1_a6nlc"]
+
+[sub_resource type="SystemFont" id="SystemFont_b1167"]
+font_names = PackedStringArray("Impact")
+subpixel_positioning = 0
+
+[node name="Button" type="Button"]
+offset_right = 8.0
+offset_bottom = 8.0
+theme = ExtResource("1_a6nlc")
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = SubResource("SystemFont_b1167")
+theme_override_font_sizes/font_size = 32
+text = "Test"

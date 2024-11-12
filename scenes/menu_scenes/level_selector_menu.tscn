@@ -1,0 +1,108 @@
+[gd_scene load_steps=5 format=3 uid="uid://dgeldh6mkroki"]
+
+[ext_resource type="Script" path="res://scripts/level_select_menu.gd" id="1_yrggx"]
+[ext_resource type="PackedScene" uid="uid://can6od2otra6s" path="res://scenes/canvas_ui/button.tscn" id="2_wdxbo"]
+[ext_resource type="PackedScene" uid="uid://b8tsw525wce4u" path="res://scenes/canvas_ui/btn_click.tscn" id="3_faqob"]
+
+[sub_resource type="SystemFont" id="SystemFont_ujoka"]
+font_names = PackedStringArray("Impact")
+
+[node name="GameModeSelect" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_yrggx")
+
+[node name="Title" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+offset_top = 32.0
+grow_horizontal = 2
+theme_override_fonts/font = SubResource("SystemFont_ujoka")
+theme_override_font_sizes/font_size = 64
+text = "Game Mode Selection"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[node name="btn_click" parent="." instance=ExtResource("3_faqob")]
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -608.0
+offset_top = -249.0
+offset_right = 608.0
+offset_bottom = 288.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="GridContainer" type="GridContainer" parent="HBoxContainer/HBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="GridContainer" type="GridContainer" parent="HBoxContainer/HBoxContainer/ScrollContainer/GridContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 14
+theme_override_constants/v_separation = 12
+
+[node name="ArcadeMode" parent="HBoxContainer/HBoxContainer/ScrollContainer/GridContainer/GridContainer" instance=ExtResource("2_wdxbo")]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "Arcade"
+
+[node name="ArcadePlusMode" parent="HBoxContainer/HBoxContainer/ScrollContainer/GridContainer/GridContainer" instance=ExtResource("2_wdxbo")]
+layout_mode = 2
+text = "Arcade+"
+
+[node name="MemoryMode" parent="HBoxContainer/HBoxContainer/ScrollContainer/GridContainer/GridContainer" instance=ExtResource("2_wdxbo")]
+layout_mode = 2
+text = "Memory"
+
+[node name="FidgetMode" parent="HBoxContainer/HBoxContainer/ScrollContainer/GridContainer/GridContainer" instance=ExtResource("2_wdxbo")]
+layout_mode = 2
+text = "Fidget"
+
+[node name="MainMenu" parent="." instance=ExtResource("2_wdxbo")]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -68.0
+offset_right = 76.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 0
+text = "Main Menu"
+
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
+[connection signal="pressed" from="HBoxContainer/HBoxContainer/ScrollContainer/GridContainer/GridContainer/ArcadeMode" to="." method="_on_arcade_mode_pressed"]
+[connection signal="pressed" from="HBoxContainer/HBoxContainer/ScrollContainer/GridContainer/GridContainer/ArcadePlusMode" to="." method="_on_arcade_plus_mode_pressed"]
+[connection signal="pressed" from="HBoxContainer/HBoxContainer/ScrollContainer/GridContainer/GridContainer/MemoryMode" to="." method="_on_memory_mode_pressed"]
+[connection signal="pressed" from="HBoxContainer/HBoxContainer/ScrollContainer/GridContainer/GridContainer/FidgetMode" to="." method="_on_fidget_mode_pressed"]
+[connection signal="pressed" from="MainMenu" to="." method="_on_main_menu_pressed"]

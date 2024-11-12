@@ -1,0 +1,182 @@
+[gd_scene load_steps=12 format=3 uid="uid://cb4qqw3f8rc7g"]
+
+[ext_resource type="Script" path="res://scripts/options_menu.gd" id="1_8p3jn"]
+[ext_resource type="PackedScene" uid="uid://can6od2otra6s" path="res://scenes/canvas_ui/button.tscn" id="2_kmke2"]
+[ext_resource type="Theme" uid="uid://yys17mde0tii" path="res://themes/buttons_theme.tres" id="2_x3xch"]
+[ext_resource type="Script" path="res://scripts/fullscreenToggle.gd" id="3_k7al8"]
+[ext_resource type="PackedScene" uid="uid://du8ibx1qes1h7" path="res://scenes/canvas_ui/volume_slider.tscn" id="3_rh4n7"]
+[ext_resource type="PackedScene" uid="uid://b8tsw525wce4u" path="res://scenes/canvas_ui/btn_click.tscn" id="3_xnno8"]
+[ext_resource type="Script" path="res://scripts/resolutionSelected.gd" id="4_g1hg6"]
+
+[sub_resource type="SystemFont" id="SystemFont_ujoka"]
+font_names = PackedStringArray("Impact")
+
+[sub_resource type="SystemFont" id="SystemFont_sc2ie"]
+font_names = PackedStringArray("Impact")
+
+[sub_resource type="SystemFont" id="SystemFont_fas2s"]
+font_names = PackedStringArray("Impact")
+
+[sub_resource type="SystemFont" id="SystemFont_i7eqa"]
+font_names = PackedStringArray("Impact")
+
+[node name="OptionsMenu" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_8p3jn")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 60
+
+[node name="Separator" type="Control" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_ujoka")
+theme_override_font_sizes/font_size = 64
+text = "Options"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="GridContainer5" type="GridContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 50
+columns = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/GridContainer5"]
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_sc2ie")
+theme_override_font_sizes/font_size = 24
+text = "Fullscreen"
+
+[node name="fullscreenToggle" type="OptionButton" parent="MarginContainer/HBoxContainer/VBoxContainer/GridContainer5"]
+layout_mode = 2
+theme = ExtResource("2_x3xch")
+theme_override_fonts/font = SubResource("SystemFont_fas2s")
+theme_override_font_sizes/font_size = 24
+selected = 0
+item_count = 2
+popup/item_0/text = "Off"
+popup/item_1/text = "On"
+popup/item_1/id = 2
+script = ExtResource("3_k7al8")
+
+[node name="GridContainer" type="GridContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_constants/h_separation = 50
+columns = 2
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_sc2ie")
+theme_override_font_sizes/font_size = 24
+text = "Resolution"
+
+[node name="resolutionSelected" type="OptionButton" parent="MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+theme = ExtResource("2_x3xch")
+theme_override_fonts/font = SubResource("SystemFont_i7eqa")
+theme_override_font_sizes/font_size = 24
+selected = 0
+item_count = 3
+popup/item_0/text = "1280x720"
+popup/item_1/text = "1920x1080"
+popup/item_1/id = 1
+popup/item_2/text = "2560x1440"
+popup/item_2/id = 2
+script = ExtResource("4_g1hg6")
+
+[node name="BoxContainer" type="BoxContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+alignment = 1
+vertical = true
+
+[node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/BoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_sc2ie")
+theme_override_font_sizes/font_size = 24
+text = "Master Volume"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="master_vol" parent="MarginContainer/HBoxContainer/VBoxContainer/BoxContainer" instance=ExtResource("3_rh4n7")]
+layout_mode = 2
+bus_name = "Master"
+
+[node name="Label2" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/BoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_sc2ie")
+theme_override_font_sizes/font_size = 24
+text = "SFX  Volume"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="sfx_vol" parent="MarginContainer/HBoxContainer/VBoxContainer/BoxContainer" instance=ExtResource("3_rh4n7")]
+layout_mode = 2
+bus_name = "SFX"
+
+[node name="Label3" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/BoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_sc2ie")
+theme_override_font_sizes/font_size = 24
+text = "BGM Volume"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="bgm_vol" parent="MarginContainer/HBoxContainer/VBoxContainer/BoxContainer" instance=ExtResource("3_rh4n7")]
+layout_mode = 2
+bus_name = "BGM"
+
+[node name="MainMenu" parent="." instance=ExtResource("2_kmke2")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -72.0
+offset_top = 250.0
+offset_right = 72.0
+offset_bottom = 290.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Main Menu"
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[node name="btn_click" parent="." instance=ExtResource("3_xnno8")]
+
+[connection signal="item_selected" from="MarginContainer/HBoxContainer/VBoxContainer/GridContainer5/fullscreenToggle" to="MarginContainer/HBoxContainer/VBoxContainer/GridContainer5/fullscreenToggle" method="_on_item_selected"]
+[connection signal="item_selected" from="MarginContainer/HBoxContainer/VBoxContainer/GridContainer/resolutionSelected" to="MarginContainer/HBoxContainer/VBoxContainer/GridContainer/resolutionSelected" method="_on_item_selected"]
+[connection signal="pressed" from="MainMenu" to="." method="_on_main_menu_pressed"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

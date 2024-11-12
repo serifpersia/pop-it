@@ -69,6 +69,7 @@ func play_random_sound(mesh_position: Vector3) -> void:
 
 	var audio := AudioStreamPlayer3D.new()
 	audio.stream = sound_pool[sound_idx]
+	audio.set_bus("SFX")
 	add_child(audio)
 	audio.position = mesh_position
 	audio.play()
@@ -201,8 +202,7 @@ func advance_level() -> void:
 		return
 		
 	is_transitioning = true
-	
-	# Clean up existing tweens
+
 	for tween in active_tweens.values():
 		if tween and tween.is_valid():
 			tween.kill()
@@ -223,7 +223,6 @@ func advance_level() -> void:
 				.set_ease(Tween.EASE_OUT)\
 				.set_trans(Tween.TRANS_CUBIC)
 			
-			# Reset materials
 			var default_material := StandardMaterial3D.new()
 			default_material.roughness = 0.5
 			default_material.albedo_color = Color(0.792, 0.808, 0.973)
@@ -232,7 +231,6 @@ func advance_level() -> void:
 	
 	await reset_tween.finished
 	
-	# Reset game state
 	reset_key_states()
 	popped_bubbles.clear()
 	is_transitioning = false
@@ -242,6 +240,7 @@ func play_level_completion_sound() -> void:
 	if level_completion_sound:
 		var audio := AudioStreamPlayer3D.new()
 		audio.stream = level_completion_sound
+		audio.set_bus("SFX")
 		add_child(audio)
 		audio.position = Vector3(-0.3, 0.5, 0)
 		audio.play()

@@ -7,4 +7,4 @@ func _ready():
 	await get_tree().create_timer(1).timeout
 	animation_player.play("fade_out")
 	await get_tree().create_timer(1).timeout
-	get_tree().change_scene_to_file("res://scenes/main/main.tscn")
+	get_tree().change_scene_to_file("res://scenes/menu_scenes/menu.tscn")

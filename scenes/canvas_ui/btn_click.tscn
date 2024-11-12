@@ -1,0 +1,7 @@
+[gd_scene load_steps=2 format=3 uid="uid://b8tsw525wce4u"]
+
+[ext_resource type="AudioStream" uid="uid://bvbhatucsu5mo" path="res://sounds/btn_sound.wav" id="1_j2s0w"]
+
+[node name="btn_click" type="AudioStreamPlayer"]
+stream = ExtResource("1_j2s0w")
+bus = &"SFX"
