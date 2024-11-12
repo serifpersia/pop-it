@@ -1,0 +1,58 @@
+[gd_scene load_steps=4 format=3 uid="uid://borea6tx3cxpq"]
+
+[ext_resource type="PackedScene" uid="uid://dqo2dmq5e7cdq" path="res://models/pop-it-3d.blend" id="3_ss3hy"]
+[ext_resource type="Script" path="res://scripts/popit-fidget.gd" id="4_qonqp"]
+[ext_resource type="Material" uid="uid://biid58nhbbja7" path="res://materials/Material.tres" id="5_8e7or"]
+
+[node name="PopIt" type="Node3D"]
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Combo_Label" type="Label" parent="CanvasLayer"]
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -109.0
+offset_top = 143.2
+offset_right = 109.0
+offset_bottom = 219.2
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 55
+text = "F"
+horizontal_alignment = 1
+
+[node name="pop-it-3d" parent="." instance=ExtResource("3_ss3hy")]
+script = ExtResource("4_qonqp")
+transl_mat = ExtResource("5_8e7or")
+
+[node name="1_001" parent="pop-it-3d/1" index="0"]
+gi_mode = 2
+
+[node name="1_004" parent="pop-it-3d/2" index="0"]
+gi_mode = 2
+
+[node name="1_003" parent="pop-it-3d/3" index="0"]
+gi_mode = 2
+
+[node name="1_008" parent="pop-it-3d/4" index="0"]
+gi_mode = 2
+
+[node name="1_010" parent="pop-it-3d/5" index="0"]
+gi_mode = 2
+
+[node name="1_012" parent="pop-it-3d/6" index="0"]
+gi_mode = 2
+
+[node name="1_014" parent="pop-it-3d/7" index="0"]
+gi_mode = 2
+
+[node name="1_016" parent="pop-it-3d/8" index="0"]
+gi_mode = 2
+
+[node name="1_018" parent="pop-it-3d/9" index="0"]
+gi_mode = 2
+
+[node name="1_020" parent="pop-it-3d/10" index="0"]
+gi_mode = 2
+
+[editable path="pop-it-3d"]

@@ -1,6 +1,6 @@
 [gd_scene load_steps=4 format=3 uid="uid://cd1xoal1kwi3v"]
 
-[ext_resource type="PackedScene" uid="uid://dcolnwjotxtb2" path="res://scenes/pop-it-arcade1.tscn" id="1_trhxo"]
+[ext_resource type="PackedScene" uid="uid://borea6tx3cxpq" path="res://scenes/pop-it-fidget.tscn" id="2_3u32g"]
 [ext_resource type="VoxelGIData" uid="uid://duv0f8j3c4w82" path="res://scenes/main/main.VoxelGI_data.res" id="2_nu58n"]
 
 [sub_resource type="Environment" id="Environment_xu18t"]
@@ -20,9 +20,9 @@ environment = SubResource("Environment_xu18t")
 transform = Transform3D(1, 0, 0, 0, 0.258819, 0.965926, 0, -0.965926, 0.258819, 0, 1, 0.225)
 size = 1.5
 
-[node name="PopIt" parent="." instance=ExtResource("1_trhxo")]
-
 [node name="VoxelGI" type="VoxelGI" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00299072, 0, -0.0314941)
 size = Vector3(1.29211, 1, 1.06299)
 data = ExtResource("2_nu58n")
+
+[node name="PopIt" parent="." instance=ExtResource("2_3u32g")]

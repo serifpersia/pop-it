@@ -165,6 +165,7 @@ offset_right = 109.0
 offset_bottom = 219.2
 grow_horizontal = 2
 theme_override_font_sizes/font_size = 55
+text = "A1"
 horizontal_alignment = 1
 
 [node name="Score_Display" type="Node2D" parent="CanvasLayer"]
