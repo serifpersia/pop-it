@@ -1,4 +1,4 @@
 # pop-it
  Pop The Bubbles - The Game
- 
-![image](https://github.com/user-attachments/assets/87024cbb-bd5d-4220-847c-04c7ce79f105)
+
+![thumb](https://github.com/user-attachments/assets/e396693e-b121-4fa8-acc4-bf6a6f34ed7f)
