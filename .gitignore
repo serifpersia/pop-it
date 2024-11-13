@@ -5,3 +5,6 @@
 *.import
 *.blend1
 /addons
+/exports/linux
+/exports/mac
+/exports/windows
