@@ -43,7 +43,7 @@ If you'd like to build **pop it!** from source, follow these steps:
      ```
      pop-it/
      └── addons/
-         ├── serialports/
+         ├── discord-rpc-gd/
      ```
 
 3. **Configuration**:
