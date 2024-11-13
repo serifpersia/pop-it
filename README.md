@@ -8,6 +8,12 @@
 
 **pop it!** is a fun and addictive game developed using the Godot Engine. It includes four exciting game modes: **Arcade**, **Arcade+**, **Memory**, and **Fidget**.
 
+<div align="center">
+
+https://github.com/user-attachments/assets/62f213b8-35ba-4ed5-b3a6-b505167af995
+
+</div>
+
 ## Game Modes
 
 - **Arcade**: Classic bubble-popping fun with progressively challenging levels.
