@@ -69,6 +69,8 @@ var current_hue : float
 var start_time
 
 func _ready() -> void:
+	await get_tree().create_timer(1.0).timeout
+	
 	randomize()
 	current_hue = randf()
 	start_time = Time.get_ticks_msec()

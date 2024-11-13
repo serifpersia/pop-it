@@ -1,55 +1,10 @@
 extends Node3D
 
-const INPUT_KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
-const MAX_SOUND_HISTORY = 2
-const START_BUBBLES = 3
-const MAX_BUBBLES = 8
+@export var transl_mat: StandardMaterial3D
 
-var game_over := false
-var progress_tween: Tween
-
-
-
-@onready var time_bar: ProgressBar = $"../CanvasLayer/Time_Bar"
 @onready var finish_level_scene: Control = $"../FinishLevelScene"
 @onready var canvas_layer: CanvasLayer = $"../CanvasLayer"
 @onready var high_score: Label = $"../FinishLevelScene/MarginContainer/HBoxContainer/VBoxContainer/Score"
-
-var base_decrease_time := 15.0
-var difficulty_multiplier := 1.0
-
-var key_states := {}
-var active_bubbles: PackedInt32Array = []
-var previous_bubbles: PackedInt32Array = []
-var current_level := 1
-var score := 0
-var level_config := {}
-var bubble_nodes: Array[Node3D] = []
-var sound_pool: Array[AudioStream] = []
-var last_played_sounds: PackedInt32Array = []
-var active_tweens := {}
-
-var row_config := {
-	"row1": PackedInt32Array([0, 1, 2]),
-	"row2": PackedInt32Array([3, 4, 5, 6]),
-	"row3": PackedInt32Array([7, 8, 9])
-}
-
-var current_pressed_keys := 0
-const MAX_SIMULTANEOUS_PRESSES = 6
-
-var level_completion_sound: AudioStream = load("res://sounds/pop-it_Insert 15.wav")
-
-var popped_bubbles: PackedInt32Array = []
-var is_transitioning := false
-
-var combo := 0
-
-@onready var combo_label: Label = $"../CanvasLayer/Combo_Label"
-
-@export var transl_mat: StandardMaterial3D
-
-var current_hue : float
 
 @onready var level_100: ColorRect = $"../CanvasLayer/Score_Display/level_100"
 @onready var level_10: ColorRect = $"../CanvasLayer/Score_Display/level_10"
@@ -63,39 +18,69 @@ var current_hue : float
 @onready var _10: ColorRect = $"../CanvasLayer/Score_Display/10"
 @onready var _1: ColorRect = $"../CanvasLayer/Score_Display/1"
 
-@onready var c_mult_10: ColorRect = $"../CanvasLayer/Score_Display/c_mult_10"
-@onready var c_mult_1: ColorRect = $"../CanvasLayer/Score_Display/c_mult_1"
+const INPUT_KEYS = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"]
+const MAX_SOUND_HISTORY = 2
+const START_BUBBLES = 3
+const MAX_BUBBLES = 8
+const MAX_SIMULTANEOUS_PRESSES = 6
+const BUBBLE_DISPLAY_TIME = 1.0
+const SEQUENCE_DELAY = 0.25
+
+var row_config := {
+	"row1": PackedInt32Array([0, 1, 2]),
+	"row2": PackedInt32Array([3, 4, 5, 6]),
+	"row3": PackedInt32Array([7, 8, 9])
+}
+
+var game_over := false
+var key_states := {}
+var current_level := 1
+var score := 0
+var level_config := {}
+var bubble_nodes: Array[Node3D] = []
+var sound_pool: Array[AudioStream] = []
+var sound_memory_pool: Array[AudioStream] = []
+var last_played_sounds: PackedInt32Array = []
+var current_pressed_keys := 0
+var level_completion_sound: AudioStream = load("res://sounds/mem_victory.wav")
+var is_transitioning := false
+var combo := 0
+var current_hue : float
+var sequence_to_match: Array = []
+var player_sequence: Array = []
+var is_showing_sequence := false
+var can_input := false
+var increase_bubbles_every := 3
+var bubble_increase_interval := 1
 
 func _ready() -> void:
+	await get_tree().create_timer(1.0).timeout
+
 	randomize()
 	current_hue = randf()
 	_cache_bubble_nodes()
 	generate_level_config()
 	preload_pop_sounds()
 	reset_key_states()
-	setup_progress_bar()
+	
+	initialize_bubble_lights()
+	
 	start_new_round()
 
-func setup_progress_bar() -> void:
-	time_bar.min_value = 0
-	time_bar.max_value = 100
-	time_bar.value = 100
-	_start_decrease_tween()
-	
-func _start_decrease_tween() -> void:
-	if progress_tween:
-		progress_tween.kill()
-	
-	var decrease_time = base_decrease_time / pow(difficulty_multiplier, 0.7)
-	progress_tween = create_tween()
-	progress_tween.tween_property(time_bar, "value", 0, decrease_time)
-	progress_tween.set_trans(Tween.TRANS_LINEAR)
+func initialize_bubble_lights() -> void:
+	for bubble_node in bubble_nodes:
+		var bubble_mesh_instance = bubble_node.get_child(0)
+		var omni_light = OmniLight3D.new()
+		
+		var light_pos = Vector3(bubble_mesh_instance.position.x, bubble_mesh_instance.position.y - 0.114, bubble_mesh_instance.position.z)
+		omni_light.position = light_pos
+		omni_light.omni_range = 0.088
+		omni_light.omni_attenuation = 0.82
+		omni_light.light_color = Color.from_hsv(current_hue, 1, 1)
+		omni_light.light_energy = 0
 
-func _process(_delta: float) -> void:
-	if time_bar.value <= 0 and not game_over:
-		game_over = true
-		handle_game_over()
-
+		bubble_mesh_instance.add_child(omni_light)
+		
 func handle_game_over() -> void:
 	await get_tree().create_timer(1.0).timeout
 	hide()
@@ -135,15 +120,6 @@ func _update_level_display(get_level: int) -> void:
 	level_10.material.set_shader_parameter("Number", tens)
 	level_1.material.set_shader_parameter("Number", units)
 	
-func _update_combo_multiplier_display(get_combo: int) -> void:
-	var combo_m_str = str(get_combo).pad_zeros(2)
-	
-	var tens = int(combo_m_str[0])
-	var units = int(combo_m_str[1])
-
-	c_mult_10.material.set_shader_parameter("Number", tens)
-	c_mult_1.material.set_shader_parameter("Number", units)
-	
 func reset_key_states() -> void:
 	key_states.clear()
 	current_pressed_keys = 0
@@ -175,16 +151,31 @@ func play_random_sound(mesh_position: Vector3) -> void:
 	audio.play()
 	audio.finished.connect(func(): audio.queue_free())
 
+func play_memory_sound(index: int, mesh_position: Vector3) -> void:
+	if sound_memory_pool.is_empty():
+		return
+
+	var audio := AudioStreamPlayer3D.new()
+	audio.stream = sound_memory_pool[index]
+	audio.set_bus("SFX")
+	add_child(audio)
+	audio.position = mesh_position
+	audio.play()
+
+	audio.finished.connect(func(): audio.queue_free())
+
+
+
 func preload_pop_sounds() -> void:
-	for i in range(1, 15):
-		var sound_path := "res://sounds/pop-it_Insert %d.wav" % i
-		sound_pool.append(load(sound_path))
+	for i in range(1, 11):
+		var sound_path := "res://sounds/s%d.wav" % i
+		sound_memory_pool.append(load(sound_path))
 
 func generate_level_config() -> void:
 	for level in range(1, 101):
 		var bubbles := START_BUBBLES + roundi(((MAX_BUBBLES - START_BUBBLES) * float(level - 1)) / 99.0)
 		bubbles = clampi(bubbles, START_BUBBLES, MAX_BUBBLES)
-		var spacing := maxi(roundi(2.0 - float(level) / 10.0), 1)
+		var spacing := maxi(roundi(1.0 - float(level) / 10.0), 1)
 		level_config[level] = {"bubbles": bubbles, "spacing": spacing}
 
 func get_level_config(level: int) -> Dictionary:
@@ -229,93 +220,125 @@ func _is_valid_position(pos: int, existing: PackedInt32Array, spacing: int) -> b
 	return true
 
 func start_new_round() -> void:
-	remove_existing_lights()
-	
-	active_bubbles = get_valid_bubble_positions()
-	previous_bubbles = active_bubbles.duplicate()
-	
 	current_hue = randf()
+	player_sequence.clear()
+	sequence_to_match.clear()
+	can_input = false	
 	
-	for bubble_idx in active_bubbles:
-		light_up_bubble(bubble_idx)
+	var num_bubbles = get_bubble_count_for_level(current_level)
+	for _i in range(num_bubbles):
+		sequence_to_match.append(randi() % 10)
+
+	update_light_colors()
+
+	show_sequence()
+
+func update_light_colors() -> void:
+	for bubble_node in bubble_nodes:
+		var bubble_mesh_instance = bubble_node.get_child(0)
+		var omni_light = bubble_mesh_instance.get_child(0) as OmniLight3D
+		
+		if is_instance_valid(omni_light):
+			omni_light.light_color = Color.from_hsv(current_hue, 1, 1)
+
+
+
+func get_bubble_count_for_level(level: int) -> int:
+	var level_group = float(level - 1) / float(increase_bubbles_every)
+	return min(START_BUBBLES + int(level_group), MAX_BUBBLES)
+
+func show_sequence() -> void:
+	is_showing_sequence = true
+	var sequence_tween = create_tween()
+	
+	sequence_tween.finished.connect(func(): sequence_tween.kill())
+	
+	for i in range(sequence_to_match.size()):
+		var bubble_idx = sequence_to_match[i]
+		
+		sequence_tween.tween_callback(func():
+			if not is_instance_valid(self):
+				return
+			remove_existing_lights()
+			
+			await get_tree().create_timer(0.5).timeout
+
+			light_up_bubble(bubble_idx)
+			play_memory_sound(bubble_idx, bubble_nodes[bubble_idx].position)
+		)
+		
+		sequence_tween.tween_interval(BUBBLE_DISPLAY_TIME)
+	
+	sequence_tween.tween_callback(func():
+		if not is_instance_valid(self):
+			return
+		remove_existing_lights()
+		is_showing_sequence = false
+		can_input = true
+	)
 
 func light_up_bubble(index: int) -> void:
+	if index < 0 or index >= bubble_nodes.size():
+		return
+
+	var bubble_mesh: MeshInstance3D = bubble_nodes[index]
+	if not is_instance_valid(bubble_mesh):
+		return
+
+	var bubble_mesh_instance = bubble_mesh.get_child(0)
+	if not is_instance_valid(bubble_mesh_instance):
+		return
+
+	var omni_light = bubble_mesh_instance.get_child(0) as OmniLight3D
+	if not is_instance_valid(omni_light):
+		return
+
+
+	bubble_mesh_instance.material_override = transl_mat
+	
+	omni_light.light_energy = 2.15
+	_handle_bubble_light_up(bubble_mesh_instance)
+
+
+
+func player_light_up_bubble(index: int) -> void:
 	var bubble_mesh: MeshInstance3D = bubble_nodes[index]
 	var bubble_mesh_instance = bubble_mesh.get_child(0)
 	bubble_mesh_instance.material_override = transl_mat
 
-	_set_key_Lights(bubble_mesh_instance)
-	_handle_bubble_light_up(bubble_mesh_instance)
+	_handle_player_bubble_light_up(bubble_mesh_instance)
 
 func _unhandled_key_input(event: InputEvent) -> void:
-	if game_over:
+	if game_over or is_showing_sequence or not can_input:
 		return
-		
+	
 	for i in INPUT_KEYS.size():
 		var key: String = INPUT_KEYS[i]
 		if event.is_action_pressed(key) and not key_states[key]:
-			if current_pressed_keys < MAX_SIMULTANEOUS_PRESSES:
-				current_pressed_keys += 1
-				_handle_key_press(i)
-		elif event.is_action_released(key) and key_states[key]:
-			current_pressed_keys -= 1
-			_handle_key_release(i)
+			_handle_key_press(i)
 
 func _handle_key_press(index: int) -> void:
-	if game_over or is_transitioning or index >= bubble_nodes.size():
+	if game_over or is_showing_sequence or not can_input:
 		return
-		
-	key_states[INPUT_KEYS[index]] = true
-	var cap_mesh: MeshInstance3D = bubble_nodes[index].get_child(0)
 	
-	if not (index in popped_bubbles):
-		if index in active_bubbles:
-			var base_score = 100
-			var multiplier = get_multiplier()
-			var score_increase = base_score * multiplier
-			score += score_increase
-			
-			var time_bonus = 2.0 + (combo * 0.1)
-			time_bonus = min(time_bonus, 5.0)
-			time_bar.value = min(time_bar.value + time_bonus, time_bar.max_value)
-			
-			_update_score_display(score)
-			_update_combo(true)
-			_update_combo_multiplier_display(multiplier)
+	key_states[INPUT_KEYS[index]] = true
+	player_sequence.append(index)
 
-			var new_active_bubbles := PackedInt32Array([])
-			for bubble in active_bubbles:
-				if bubble != index:
-					new_active_bubbles.append(bubble)
-			active_bubbles = new_active_bubbles
-			
-			popped_bubbles.append(index)
-			play_random_sound(bubble_nodes[index].position)
-			
-			if index in active_tweens and active_tweens[index] != null:
-				active_tweens[index].kill()
-			
-			var tween = create_tween()
-			active_tweens[index] = tween
-			tween.tween_property(cap_mesh, "blend_shapes/popped", 1.0, 0.1)\
-				.set_ease(Tween.EASE_OUT)\
-				.set_trans(Tween.TRANS_CUBIC)
-			
-			var material_tween = create_tween()
-			material_tween.tween_callback(func():
-				transl_mat.roughness = 0.5
-				cap_mesh.material_override = transl_mat
-			).set_delay(0.1)
-			
-			if active_bubbles.is_empty():
-				await get_tree().create_timer(0.2).timeout
-				advance_level()
-		elif not (index in previous_bubbles):
-			_update_combo(false)
-			_update_combo_multiplier_display(1)
+	reset_key_states()
 
-func _handle_key_release(index: int) -> void:
-	key_states[INPUT_KEYS[index]] = false
+	player_light_up_bubble(index)
+	play_memory_sound(index, bubble_nodes[index].position)
+	
+	var current_pos = player_sequence.size() - 1
+	if index != sequence_to_match[current_pos]:
+		game_over = true
+		handle_game_over()
+		return
+	
+	if player_sequence.size() == sequence_to_match.size():
+		can_input = false
+		await get_tree().create_timer(0.5).timeout
+		advance_level()
 
 func advance_level() -> void:
 	if is_transitioning or game_over:
@@ -323,130 +346,74 @@ func advance_level() -> void:
 	
 	is_transitioning = true
 	
-	difficulty_multiplier += 0.03
-	
-	var time_bonus = time_bar.value * 0.3
-	time_bar.value = min(time_bar.value + time_bonus, time_bar.max_value)
-	
-	_start_decrease_tween()
-	
-	for tween in active_tweens.values():
-		if tween and tween.is_valid():
-			tween.kill()
-	active_tweens.clear()
-	
 	play_level_completion_sound()
+	
+	await get_tree().create_timer(0.5).timeout
+	
 	current_level += 1
 	_update_level_display(current_level)
-	
-	var reset_tween = create_tween()
-	reset_tween.set_parallel(true)
+	score += 100 * current_level
+	_update_score_display(score)
 	
 	remove_existing_lights()
-	
-	for bubble_idx in range(bubble_nodes.size()):
-		var cap_mesh: MeshInstance3D = bubble_nodes[bubble_idx].get_child(0)
-		if cap_mesh:
-			reset_tween.tween_property(cap_mesh, "blend_shapes/popped", 0.0, 0.1)\
-				.set_ease(Tween.EASE_OUT)\
-				.set_trans(Tween.TRANS_CUBIC)
-			
-			var default_material := StandardMaterial3D.new()
-			default_material.roughness = 0.5
-			default_material.albedo_color = Color(0.792, 0.808, 0.973)
-			cap_mesh.material_override = default_material
-			bubble_nodes[bubble_idx].material_override = default_material
-	
-	await reset_tween.finished
-	
 	reset_key_states()
-	popped_bubbles.clear()
+	
 	is_transitioning = false
 	start_new_round()
-
+	
 func play_level_completion_sound() -> void:
 	if level_completion_sound:
 		var audio := AudioStreamPlayer3D.new()
 		audio.stream = level_completion_sound
 		audio.set_bus("SFX")
 		add_child(audio)
-		audio.position = Vector3(-0.3, 0.5, 0)
 		audio.play()
 		audio.finished.connect(func(): audio.queue_free())
 
-var active_combo_tween: Tween = null
-
-func get_multiplier() -> int:
-	if combo > 120:
-		combo_label.set_modulate(Color(1, 1, 1))
-		return 12
-	elif combo > 80:
-		combo_label.set_modulate(Color(1.0, 0.6, 0.0))
-		return 8
-	elif combo > 50:
-		combo_label.set_modulate(Color(1.0, 1.0, 0.0))
-		return 6
-	elif combo > 30:
-		combo_label.set_modulate(Color(0.0, 1.0, 0.4))
-		return 4
-	elif combo > 10:
-		combo_label.set_modulate(Color(0.3, 0.6, 1))
-		return 2
-	else:
-		combo_label.set_modulate(Color(0.7, 0.7, 0.7))
-		return 1
-
-func _update_combo(increase: bool) -> void:
-	if increase:
-		combo += 1
-		combo_label.set_text(str(combo))
-		
-		if active_combo_tween and active_combo_tween.is_valid():
-			active_combo_tween.kill()
-			
-		active_combo_tween = create_tween()
-		
-		combo_label.scale = Vector2.ONE
-		
-		active_combo_tween.tween_property(combo_label, "scale", Vector2(1.1, 1.1), 0.1)
-		active_combo_tween.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_SINE)
-		
-		active_combo_tween.tween_property(combo_label, "scale", Vector2.ONE, 0.1).set_delay(0.1)
-		active_combo_tween.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_SINE)
-	else:
-		combo = 0
-		combo_label.set_text("")
-
 func _handle_bubble_light_up(mesh: MeshInstance3D):
+	if not is_instance_valid(mesh):
+		return
+		
 	var tween = create_tween()
-	
+	if not tween:
+		return
+		
 	var mesh_light = mesh.get_child(0)
+	if not is_instance_valid(mesh_light):
+		return
 	
-	if mesh_light:
-		tween.tween_property(mesh_light, "light_energy", 2.15, 0.15)\
-			.set_ease(Tween.EASE_IN)\
-			.set_trans(Tween.TRANS_LINEAR)
+	tween.finished.connect(func(): tween.kill())
+	tween.tween_property(mesh_light, "light_energy", 2.15, 0.15)\
+		.set_ease(Tween.EASE_IN)\
+		.set_trans(Tween.TRANS_LINEAR)
 
+func _handle_player_bubble_light_up(mesh: MeshInstance3D):
+	if not is_instance_valid(mesh):
+		return
+		
+	var tween = create_tween()
+	if not tween:
+		return
+		
+	var mesh_light = mesh.get_child(0)
+	if not is_instance_valid(mesh_light):
+		return
+	
+	tween.finished.connect(func(): tween.kill())
+	tween.tween_property(mesh_light, "light_energy", 2.15, 0.15)\
+		.set_ease(Tween.EASE_IN)\
+		.set_trans(Tween.TRANS_LINEAR)
+			
+	tween.tween_property(mesh_light, "light_energy", 0.0, 0.15)\
+		.set_ease(Tween.EASE_OUT)\
+		.set_trans(Tween.TRANS_LINEAR)
 
-func _set_key_Lights(mesh_instance: MeshInstance3D)-> void:
 	
-	var omni_light = OmniLight3D.new()
-	
-	var light_pos = Vector3(mesh_instance.position.x,mesh_instance.position.y - 0.114, mesh_instance.position.z)
-	omni_light.position = light_pos
-	
-	omni_light.omni_range = 0.088
-	omni_light.omni_attenuation = 0.82
-	omni_light.light_color = Color.from_hsv(current_hue, 1, 1)
-	omni_light.light_energy = 0
-	
-	mesh_instance.add_child(omni_light)
-
 func remove_existing_lights() -> void:
 	for bubble_idx in range(bubble_nodes.size()):
 		var bubble_mesh: MeshInstance3D = bubble_nodes[bubble_idx]
 		var bubble_mesh_instance = bubble_mesh.get_child(0)
 		
-		for child in bubble_mesh_instance.get_children():
-			if child is OmniLight3D:
-				child.queue_free()
+		var omni_light = bubble_mesh_instance.get_child(0) as OmniLight3D
+		if is_instance_valid(omni_light):
+			omni_light.light_energy = 0

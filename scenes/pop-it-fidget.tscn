@@ -20,7 +20,6 @@ offset_right = 109.0
 offset_bottom = 219.2
 grow_horizontal = 2
 theme_override_font_sizes/font_size = 55
-text = "F"
 horizontal_alignment = 1
 
 [node name="pop-it-3d" parent="." instance=ExtResource("3_ss3hy")]

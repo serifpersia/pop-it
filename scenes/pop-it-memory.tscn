@@ -1,10 +1,11 @@
-[gd_scene load_steps=20 format=3 uid="uid://c5ex3ui68bpy3"]
+[gd_scene load_steps=19 format=3 uid="uid://c5ex3ui68bpy3"]
 
 [ext_resource type="Shader" uid="uid://bwrhhx067mqoh" path="res://shaders/7-segment_display.tres" id="1_mhb64"]
 [ext_resource type="Script" path="res://scripts/bgm_control.gd" id="1_wukb3"]
-[ext_resource type="PackedScene" uid="uid://8rdpyfdcv1su" path="res://scenes/menu_scenes/finish_level_scene.tscn" id="2_mbky1"]
-[ext_resource type="PackedScene" uid="uid://b20113doycxsj" path="res://scenes/time_bar.tscn" id="2_rgn15"]
+[ext_resource type="Script" path="res://scripts/fail_finish_scene.gd" id="2_c4bwp"]
+[ext_resource type="PackedScene" uid="uid://can6od2otra6s" path="res://scenes/canvas_ui/button.tscn" id="3_ab2el"]
 [ext_resource type="PackedScene" uid="uid://dqo2dmq5e7cdq" path="res://models/pop-it-3d.blend" id="3_ret02"]
+[ext_resource type="PackedScene" uid="uid://b8tsw525wce4u" path="res://scenes/canvas_ui/btn_click.tscn" id="4_2jrpf"]
 [ext_resource type="Script" path="res://scripts/pop-it-memory.gd" id="4_3utf0"]
 [ext_resource type="Material" uid="uid://biid58nhbbja7" path="res://materials/Material.tres" id="5_etnpw"]
 
@@ -33,30 +34,6 @@ shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
 shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_3wsk0"]
-shader = ExtResource("1_mhb64")
-shader_parameter/SkewAngle = 0.0
-shader_parameter/Size = 32.0
-shader_parameter/SegmentWidth = 0.15
-shader_parameter/SegmentOffsetRatio = 0.5
-shader_parameter/Number = 1
-shader_parameter/ON = true
-shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
-shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
-shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_du3sk"]
-shader = ExtResource("1_mhb64")
-shader_parameter/SkewAngle = 0.0
-shader_parameter/Size = 32.0
-shader_parameter/SegmentWidth = 0.15
-shader_parameter/SegmentOffsetRatio = 0.5
-shader_parameter/Number = 0
-shader_parameter/ON = true
-shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
-shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
-shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_c2qyv"]
 shader = ExtResource("1_mhb64")
 shader_parameter/SkewAngle = 0.0
 shader_parameter/Size = 32.0
@@ -155,23 +132,78 @@ shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
 [node name="popit_memory" type="Node3D"]
 script = ExtResource("1_wukb3")
 
-[node name="FinishLevelScene" parent="." instance=ExtResource("2_mbky1")]
+[node name="FinishLevelScene" type="Control" parent="."]
+process_mode = 3
 visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("2_c4bwp")
+
+[node name="ColorRect" type="ColorRect" parent="FinishLevelScene"]
+layout_mode = 1
+color = Color(0, 0, 0, 1)
+
+[node name="MarginContainer" type="MarginContainer" parent="FinishLevelScene"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FinishLevelScene/MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 60
+
+[node name="HBoxContainer" type="HBoxContainer" parent="FinishLevelScene/MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="FinishLevelScene/MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 12
+alignment = 1
+
+[node name="Label" type="Label" parent="FinishLevelScene/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+text = "Game Completed!"
+
+[node name="Score" type="Label" parent="FinishLevelScene/MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 32
+text = "Score:"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="Restart" parent="FinishLevelScene/MarginContainer/HBoxContainer/VBoxContainer" instance=ExtResource("3_ab2el")]
+layout_mode = 2
+text = "Restart"
+
+[node name="GameModeSelect" parent="FinishLevelScene/MarginContainer/HBoxContainer/VBoxContainer" instance=ExtResource("3_ab2el")]
+layout_mode = 2
+text = "Game Mode Select"
+
+[node name="MainMenu" parent="FinishLevelScene/MarginContainer/HBoxContainer/VBoxContainer" instance=ExtResource("3_ab2el")]
+layout_mode = 2
+text = "Main Menu
+"
+
+[node name="Timer" type="Timer" parent="FinishLevelScene"]
+wait_time = 0.1
+one_shot = true
+
+[node name="btn_click" parent="FinishLevelScene" instance=ExtResource("4_2jrpf")]
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
-
-[node name="Combo_Label" type="Label" parent="CanvasLayer"]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -109.0
-offset_top = 143.2
-offset_right = 109.0
-offset_bottom = 219.2
-grow_horizontal = 2
-theme_override_font_sizes/font_size = 55
-text = "M"
-horizontal_alignment = 1
 
 [node name="Score_Display" type="Node2D" parent="CanvasLayer"]
 
@@ -213,34 +245,6 @@ anchor_bottom = 0.5
 offset_left = 775.0
 offset_top = 294.0
 offset_right = 815.0
-offset_bottom = 334.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="c_mult_10" type="ColorRect" parent="CanvasLayer/Score_Display"]
-material = SubResource("ShaderMaterial_du3sk")
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 1123.0
-offset_top = 294.0
-offset_right = 1163.0
-offset_bottom = 334.0
-grow_horizontal = 2
-grow_vertical = 2
-
-[node name="c_mult_1" type="ColorRect" parent="CanvasLayer/Score_Display"]
-material = SubResource("ShaderMaterial_c2qyv")
-anchors_preset = 8
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-offset_left = 1155.0
-offset_top = 294.0
-offset_right = 1195.0
 offset_bottom = 334.0
 grow_horizontal = 2
 grow_vertical = 2
@@ -343,8 +347,6 @@ offset_bottom = 334.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="Time_Bar" parent="CanvasLayer" instance=ExtResource("2_rgn15")]
-
 [node name="pop-it-3d" parent="." instance=ExtResource("3_ret02")]
 script = ExtResource("4_3utf0")
 transl_mat = ExtResource("5_etnpw")
@@ -379,5 +381,9 @@ gi_mode = 2
 [node name="1_020" parent="pop-it-3d/10" index="0"]
 gi_mode = 2
 
-[editable path="FinishLevelScene"]
+[connection signal="pressed" from="FinishLevelScene/MarginContainer/HBoxContainer/VBoxContainer/Restart" to="FinishLevelScene" method="_on_restart_pressed"]
+[connection signal="pressed" from="FinishLevelScene/MarginContainer/HBoxContainer/VBoxContainer/GameModeSelect" to="FinishLevelScene" method="_on_game_mode_select_pressed"]
+[connection signal="pressed" from="FinishLevelScene/MarginContainer/HBoxContainer/VBoxContainer/MainMenu" to="FinishLevelScene" method="_on_main_menu_pressed"]
+[connection signal="timeout" from="FinishLevelScene/Timer" to="FinishLevelScene" method="_on_timer_timeout"]
+
 [editable path="pop-it-3d"]

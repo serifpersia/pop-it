@@ -8,9 +8,6 @@ const MAX_BUBBLES = 8
 var game_over := false
 var progress_tween: Tween
 
-
-
-
 @onready var time_bar: ProgressBar = $"../CanvasLayer/Time_Bar"
 @onready var finish_level_scene: Control = $"../FinishLevelScene"
 @onready var canvas_layer: CanvasLayer = $"../CanvasLayer"
@@ -69,8 +66,11 @@ var current_hue : float
 @onready var c_mult_1: ColorRect = $"../CanvasLayer/Score_Display/c_mult_1"
 
 var start_time
+var remaining_bubbles: PackedInt32Array = []
 
 func _ready() -> void:
+	await get_tree().create_timer(1.0).timeout
+	
 	randomize()
 	current_hue = randf()
 	start_time = Time.get_ticks_msec()
@@ -196,7 +196,7 @@ func generate_level_config() -> void:
 	for level in range(1, 101):
 		var bubbles := START_BUBBLES + roundi(((MAX_BUBBLES - START_BUBBLES) * float(level - 1)) / 99.0)
 		bubbles = clampi(bubbles, START_BUBBLES, MAX_BUBBLES)
-		var spacing := maxi(roundi(2.0 - float(level) / 10.0), 1)
+		var spacing := maxi(roundi(1.5 - float(level) / 10.0), 1)
 		level_config[level] = {"bubbles": bubbles, "spacing": spacing}
 
 func get_level_config(level: int) -> Dictionary:
@@ -242,14 +242,21 @@ func _is_valid_position(pos: int, existing: PackedInt32Array, spacing: int) -> b
 
 func start_new_round() -> void:
 	remove_existing_lights()
-	
+
 	active_bubbles = get_valid_bubble_positions()
+	
+	remaining_bubbles = []
+	for i in range(10):
+		if i not in active_bubbles:
+			remaining_bubbles.append(i)
+
 	previous_bubbles = active_bubbles.duplicate()
-	
 	current_hue = randf()
-	
+
 	for bubble_idx in active_bubbles:
 		light_up_bubble(bubble_idx)
+
+
 
 func light_up_bubble(index: int) -> void:
 	var bubble_mesh: MeshInstance3D = bubble_nodes[index]
@@ -276,50 +283,51 @@ func _unhandled_key_input(event: InputEvent) -> void:
 func _handle_key_press(index: int) -> void:
 	if game_over or is_transitioning or index >= bubble_nodes.size():
 		return
-		
+
 	key_states[INPUT_KEYS[index]] = true
 	var cap_mesh: MeshInstance3D = bubble_nodes[index].get_child(0)
-	
+
 	if not (index in popped_bubbles):
 		if index in active_bubbles:
 			var base_score = 100
 			var multiplier = get_multiplier()
 			var score_increase = base_score * multiplier
 			score += score_increase
-			
 			var time_bonus = 2.0 + (combo * 0.1)
-			time_bonus = min(time_bonus, 5.0)
 			time_bar.value = min(time_bar.value + time_bonus, time_bar.max_value)
-			
 			_update_score_display(score)
 			_update_combo(true)
 			_update_combo_multiplier_display(multiplier)
 
-			var new_active_bubbles := PackedInt32Array([])
-			for bubble in active_bubbles:
-				if bubble != index:
-					new_active_bubbles.append(bubble)
+			var new_active_bubbles = []
+			for i in active_bubbles:
+				if i != index:
+					new_active_bubbles.append(i)
 			active_bubbles = new_active_bubbles
-			
+
 			popped_bubbles.append(index)
 			play_random_sound(bubble_nodes[index].position)
-			
+
 			if index in active_tweens and active_tweens[index] != null:
 				active_tweens[index].kill()
-			
 			var tween = create_tween()
 			active_tweens[index] = tween
 			tween.tween_property(cap_mesh, "blend_shapes/popped", 1.0, 0.1)\
-				.set_ease(Tween.EASE_OUT)\
-				.set_trans(Tween.TRANS_CUBIC)
-			
-			var material_tween = create_tween()
-			material_tween.tween_callback(func():
-				transl_mat.roughness = 0.5
-				cap_mesh.material_override = transl_mat
-			).set_delay(0.1)
-			
-			if active_bubbles.is_empty():
+				 .set_ease(Tween.EASE_OUT)\
+				 .set_trans(Tween.TRANS_CUBIC)
+
+			if remaining_bubbles.size() > 0:
+				var new_bubble = remaining_bubbles[randi() % remaining_bubbles.size()]
+				var new_remaining_bubbles = []
+				for i in remaining_bubbles:
+					if i != new_bubble:
+						new_remaining_bubbles.append(i)
+				remaining_bubbles = new_remaining_bubbles
+
+				active_bubbles.append(new_bubble)
+				light_up_bubble(new_bubble)
+
+			if active_bubbles.is_empty() and remaining_bubbles.is_empty():
 				await get_tree().create_timer(0.2).timeout
 				advance_level()
 		elif not (index in previous_bubbles):

@@ -36,6 +36,8 @@ var row_config := {
 }
 
 func _ready() -> void:
+	await get_tree().create_timer(1.0).timeout
+	
 	randomize()
 	current_hue = randf()
 	_cache_bubble_nodes()

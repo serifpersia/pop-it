@@ -10,14 +10,17 @@ config_version=5
 
 [application]
 
-config/name="pop-it"
+config/name="pop it!"
+config/version="1.0.0"
 run/main_scene="res://scenes/intro/intro_scene.tscn"
 config/features=PackedStringArray("4.3", "Forward Plus")
 run/max_fps=60
+config/icon="res://img/popit.png"
+config/windows_native_icon="res://img/popit.ico"
 
 [autoload]
 
-AudioPlayer="*res://scenes/level_utils/audio_player.tscn"
+AudioPlayer="*res://scenes/game_modes_utils/audio_player.tscn"
 Global="*res://scripts/global.gd"
 
 [display]
