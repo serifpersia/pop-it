@@ -6,7 +6,7 @@
 
 # pop it!
 
-**pop it!** is a fun and addictive game developed using the Godot Engine. It includes four exciting game modes: **Arcade**, **Arcade+**, **Memory**, and **Fidget**.
+**pop it!** is a fun and addictive game developed using the Godot Engine.
 
 <div align="center">
 
