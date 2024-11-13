@@ -22,6 +22,8 @@ config/windows_native_icon="res://img/popit.ico"
 
 AudioPlayer="*res://scenes/game_modes_utils/audio_player.tscn"
 Global="*res://scripts/global.gd"
+DiscordRPCLoader="*res://addons/discord-rpc-gd/nodes/discord_autoload.gd"
+DiscordRpc="*res://scenes/discord_rpc.tscn"
 
 [display]
 
@@ -29,6 +31,10 @@ window/size/viewport_width=1920
 window/size/viewport_height=1080
 window/stretch/mode="canvas_items"
 window/defaults/default_clear_color=Color(0, 0, 0, 1)
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/discord-rpc-gd/plugin.cfg")
 
 [input]
 
@@ -90,5 +96,6 @@ ui_pause={
 
 [rendering]
 
+textures/vram_compression/import_etc2_astc=true
 environment/defaults/default_clear_color=Color(0, 0, 0, 1)
 anti_aliasing/quality/msaa_3d=1
