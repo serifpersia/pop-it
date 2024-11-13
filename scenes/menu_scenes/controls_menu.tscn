@@ -1,0 +1,163 @@
+[gd_scene load_steps=15 format=3 uid="uid://bckhdrnv8o2yr"]
+
+[ext_resource type="Script" path="res://scripts/controls_menu.gd" id="1_lb1bv"]
+[ext_resource type="Texture2D" uid="uid://b5f5kviig7hn0" path="res://img/keyboard_y.png" id="2_vfewe"]
+[ext_resource type="Texture2D" uid="uid://cu3k5vea6xove" path="res://img/keyboard_u.png" id="3_xulh6"]
+[ext_resource type="Texture2D" uid="uid://bp7druuxhe8y" path="res://img/keyboard_i.png" id="4_sj7lv"]
+[ext_resource type="Texture2D" uid="uid://banbalqn0lvc2" path="res://img/keyboard_g.png" id="5_g661p"]
+[ext_resource type="PackedScene" uid="uid://can6od2otra6s" path="res://scenes/canvas_ui/button.tscn" id="6_cp60n"]
+[ext_resource type="Texture2D" uid="uid://dg4h2ggph517t" path="res://img/keyboard_h.png" id="6_qlr2j"]
+[ext_resource type="Texture2D" uid="uid://boj5rtq716e1k" path="res://img/keyboard_j.png" id="7_ld64g"]
+[ext_resource type="PackedScene" uid="uid://b8tsw525wce4u" path="res://scenes/canvas_ui/btn_click.tscn" id="7_wotnp"]
+[ext_resource type="Texture2D" uid="uid://gm18c7esvl0g" path="res://img/keyboard_k.png" id="8_06s5v"]
+[ext_resource type="Texture2D" uid="uid://bpdarfnapstrc" path="res://img/keyboard_b.png" id="9_7fomm"]
+[ext_resource type="Texture2D" uid="uid://88rmyfo1q45j" path="res://img/keyboard_n.png" id="10_amf0r"]
+[ext_resource type="Texture2D" uid="uid://ttpsnf7qymi2" path="res://img/keyboard_m.png" id="11_urdd5"]
+
+[sub_resource type="SystemFont" id="SystemFont_ujoka"]
+font_names = PackedStringArray("Impact")
+
+[node name="ControlsMenu" type="Control"]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_lb1bv")
+
+[node name="MarginContainer" type="MarginContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 12
+theme_override_constants/margin_top = 12
+theme_override_constants/margin_right = 12
+theme_override_constants/margin_bottom = 12
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+theme_override_constants/separation = 60
+
+[node name="Separator" type="Control" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Title" type="Label" parent="MarginContainer/VBoxContainer"]
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_ujoka")
+theme_override_font_sizes/font_size = 64
+text = "Controls"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+alignment = 1
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer/HBoxContainer"]
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1
+
+[node name="GridContainer" type="GridContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+columns = 4
+
+[node name="Title" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_ujoka")
+theme_override_font_sizes/font_size = 64
+text = "   "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+texture = ExtResource("2_vfewe")
+
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+texture = ExtResource("3_xulh6")
+
+[node name="TextureRect3" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/GridContainer"]
+layout_mode = 2
+texture = ExtResource("4_sj7lv")
+
+[node name="GridContainer2" type="GridContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+columns = 5
+
+[node name="Title" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/GridContainer2"]
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_ujoka")
+theme_override_font_sizes/font_size = 64
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/GridContainer2"]
+layout_mode = 2
+texture = ExtResource("5_g661p")
+
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/GridContainer2"]
+layout_mode = 2
+texture = ExtResource("6_qlr2j")
+
+[node name="TextureRect3" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/GridContainer2"]
+layout_mode = 2
+texture = ExtResource("7_ld64g")
+
+[node name="TextureRect4" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/GridContainer2"]
+layout_mode = 2
+texture = ExtResource("8_06s5v")
+
+[node name="GridContainer3" type="GridContainer" parent="MarginContainer/HBoxContainer/VBoxContainer"]
+layout_mode = 2
+columns = 4
+
+[node name="Title" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer/GridContainer3"]
+layout_mode = 2
+theme_override_fonts/font = SubResource("SystemFont_ujoka")
+theme_override_font_sizes/font_size = 64
+text = "   "
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TextureRect" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/GridContainer3"]
+layout_mode = 2
+texture = ExtResource("9_7fomm")
+
+[node name="TextureRect2" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/GridContainer3"]
+layout_mode = 2
+texture = ExtResource("10_amf0r")
+
+[node name="TextureRect3" type="TextureRect" parent="MarginContainer/HBoxContainer/VBoxContainer/GridContainer3"]
+layout_mode = 2
+texture = ExtResource("11_urdd5")
+
+[node name="MainMenu" parent="." instance=ExtResource("6_cp60n")]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -72.0
+offset_top = 250.0
+offset_right = 72.0
+offset_bottom = 290.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Main Menu"
+
+[node name="Timer" type="Timer" parent="."]
+wait_time = 0.1
+one_shot = true
+
+[node name="btn_click" parent="." instance=ExtResource("7_wotnp")]
+
+[connection signal="pressed" from="MainMenu" to="." method="_on_main_menu_pressed"]
+[connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

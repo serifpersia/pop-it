@@ -64,6 +64,10 @@ text = "Play"
 layout_mode = 2
 text = "Options"
 
+[node name="Controls" parent="MarginContainer/HBoxContainer/VBoxContainer" instance=ExtResource("3_phbaw")]
+layout_mode = 2
+text = "Controls"
+
 [node name="Quit" parent="MarginContainer/HBoxContainer/VBoxContainer" instance=ExtResource("3_phbaw")]
 layout_mode = 2
 text = "Quit"
@@ -76,5 +80,6 @@ one_shot = true
 
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Play" to="." method="_on_play_pressed"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Options" to="." method="_on_options_pressed"]
+[connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Controls" to="." method="_on_controls_pressed"]
 [connection signal="pressed" from="MarginContainer/HBoxContainer/VBoxContainer/Quit" to="." method="_on_quit_pressed"]
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]
