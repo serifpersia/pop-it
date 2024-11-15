@@ -9,7 +9,7 @@ var game_over := false
 var progress_tween: Tween
 
 
-@onready var time_bar: ProgressBar = $"../CanvasLayer/Time_Bar"
+@onready var time_bar: ProgressBar = $"../CanvasLayer/Time_Bar/Time_Bar"
 @onready var finish_level_scene: Control = $"../FinishLevelScene"
 @onready var canvas_layer: CanvasLayer = $"../CanvasLayer"
 @onready var high_score: Label = $"../FinishLevelScene/MarginContainer/HBoxContainer/VBoxContainer/Score"
@@ -259,6 +259,11 @@ func light_up_bubble(index: int) -> void:
 	_set_key_Lights(bubble_mesh_instance)
 	_handle_bubble_light_up(bubble_mesh_instance)
 
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventScreenTouch and event.pressed:
+		_handle_touch(event.position)
+		
 func _unhandled_key_input(event: InputEvent) -> void:
 	if game_over:
 		return
@@ -318,6 +323,8 @@ func _handle_key_press(index: int) -> void:
 				transl_mat.roughness = 0.5
 				cap_mesh.material_override = transl_mat
 			).set_delay(0.1)
+			
+			Input.vibrate_handheld(25, 0.45)
 			
 			if active_bubbles.is_empty():
 				await get_tree().create_timer(0.2).timeout
@@ -432,7 +439,7 @@ func _update_combo(increase: bool) -> void:
 func _handle_bubble_light_up(mesh: MeshInstance3D):
 	var tween = create_tween()
 	
-	var mesh_light = mesh.get_child(0)
+	var mesh_light = mesh.get_child(1)
 	
 	if mesh_light:
 		tween.tween_property(mesh_light, "light_energy", 2.15, 0.15)\
@@ -462,3 +469,29 @@ func remove_existing_lights() -> void:
 		for child in bubble_mesh_instance.get_children():
 			if child is OmniLight3D:
 				child.queue_free()
+
+
+func _handle_touch(touch_position: Vector2) -> void:
+	var camera = get_viewport().get_camera_3d()
+	if camera:
+		var from = camera.project_ray_origin(touch_position)
+		var to = from + camera.project_ray_normal(touch_position) * 1000.0
+		
+		var space_state = get_world_3d().direct_space_state
+		var query = PhysicsRayQueryParameters3D.create(from, to)
+		var result = space_state.intersect_ray(query)
+		
+		if result:
+			var collider = result.collider
+			
+			if collider is StaticBody3D:
+				var parent_node = collider.get_parent()
+				
+				if parent_node is MeshInstance3D:
+					var grandparent_node = parent_node.get_parent()
+					
+					var grandparent_name = grandparent_node.name
+					var index = int(String(grandparent_name))
+					
+					if index > 0:
+						_handle_key_press(index - 1)

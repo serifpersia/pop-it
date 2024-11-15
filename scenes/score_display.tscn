@@ -1,0 +1,336 @@
+[gd_scene load_steps=14 format=3 uid="uid://brxxx8y3r58tv"]
+
+[ext_resource type="Shader" uid="uid://bwrhhx067mqoh" path="res://shaders/7-segment_display.tres" id="1_c0yfd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_i5waq"]
+shader = ExtResource("1_c0yfd")
+shader_parameter/SkewAngle = 0.0
+shader_parameter/Size = 32.0
+shader_parameter/SegmentWidth = 0.15
+shader_parameter/SegmentOffsetRatio = 0.5
+shader_parameter/Number = 0
+shader_parameter/ON = true
+shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
+shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
+shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n16dm"]
+shader = ExtResource("1_c0yfd")
+shader_parameter/SkewAngle = 0.0
+shader_parameter/Size = 32.0
+shader_parameter/SegmentWidth = 0.15
+shader_parameter/SegmentOffsetRatio = 0.5
+shader_parameter/Number = 0
+shader_parameter/ON = true
+shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
+shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
+shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_3wsk0"]
+shader = ExtResource("1_c0yfd")
+shader_parameter/SkewAngle = 0.0
+shader_parameter/Size = 32.0
+shader_parameter/SegmentWidth = 0.15
+shader_parameter/SegmentOffsetRatio = 0.5
+shader_parameter/Number = 1
+shader_parameter/ON = true
+shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
+shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
+shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_du3sk"]
+shader = ExtResource("1_c0yfd")
+shader_parameter/SkewAngle = 0.0
+shader_parameter/Size = 32.0
+shader_parameter/SegmentWidth = 0.15
+shader_parameter/SegmentOffsetRatio = 0.5
+shader_parameter/Number = 0
+shader_parameter/ON = true
+shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
+shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
+shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_c2qyv"]
+shader = ExtResource("1_c0yfd")
+shader_parameter/SkewAngle = 0.0
+shader_parameter/Size = 32.0
+shader_parameter/SegmentWidth = 0.15
+shader_parameter/SegmentOffsetRatio = 0.5
+shader_parameter/Number = 1
+shader_parameter/ON = true
+shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
+shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
+shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_n2uq6"]
+shader = ExtResource("1_c0yfd")
+shader_parameter/SkewAngle = 0.0
+shader_parameter/Size = 32.0
+shader_parameter/SegmentWidth = 0.15
+shader_parameter/SegmentOffsetRatio = 0.5
+shader_parameter/Number = 0
+shader_parameter/ON = true
+shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
+shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
+shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_w8de3"]
+shader = ExtResource("1_c0yfd")
+shader_parameter/SkewAngle = 0.0
+shader_parameter/Size = 32.0
+shader_parameter/SegmentWidth = 0.15
+shader_parameter/SegmentOffsetRatio = 0.5
+shader_parameter/Number = 0
+shader_parameter/ON = true
+shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
+shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
+shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_onfj2"]
+shader = ExtResource("1_c0yfd")
+shader_parameter/SkewAngle = 0.0
+shader_parameter/Size = 32.0
+shader_parameter/SegmentWidth = 0.15
+shader_parameter/SegmentOffsetRatio = 0.5
+shader_parameter/Number = 0
+shader_parameter/ON = true
+shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
+shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
+shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mvqdh"]
+shader = ExtResource("1_c0yfd")
+shader_parameter/SkewAngle = 0.0
+shader_parameter/Size = 32.0
+shader_parameter/SegmentWidth = 0.15
+shader_parameter/SegmentOffsetRatio = 0.5
+shader_parameter/Number = 0
+shader_parameter/ON = true
+shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
+shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
+shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_m2en8"]
+shader = ExtResource("1_c0yfd")
+shader_parameter/SkewAngle = 0.0
+shader_parameter/Size = 32.0
+shader_parameter/SegmentWidth = 0.15
+shader_parameter/SegmentOffsetRatio = 0.5
+shader_parameter/Number = 0
+shader_parameter/ON = true
+shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
+shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
+shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_tswex"]
+shader = ExtResource("1_c0yfd")
+shader_parameter/SkewAngle = 0.0
+shader_parameter/Size = 32.0
+shader_parameter/SegmentWidth = 0.15
+shader_parameter/SegmentOffsetRatio = 0.5
+shader_parameter/Number = 0
+shader_parameter/ON = true
+shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
+shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
+shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7ejb1"]
+shader = ExtResource("1_c0yfd")
+shader_parameter/SkewAngle = 0.0
+shader_parameter/Size = 32.0
+shader_parameter/SegmentWidth = 0.15
+shader_parameter/SegmentOffsetRatio = 0.5
+shader_parameter/Number = 0
+shader_parameter/ON = true
+shader_parameter/SegmentOnColor = Color(1, 0, 0, 1)
+shader_parameter/SegmentOffColor = Color(1, 1, 1, 0)
+shader_parameter/BackgroundColor = Color(0, 0, 0, 1)
+
+[node name="Score_Display" type="Control"]
+layout_mode = 3
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_top = 214.0
+offset_bottom = 214.0
+grow_horizontal = 2
+
+[node name="level_100" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_i5waq")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -256.0
+offset_top = 6.0
+offset_right = -216.0
+offset_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="level_10" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_n16dm")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -224.0
+offset_top = 6.0
+offset_right = -184.0
+offset_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="level_1" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_3wsk0")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -192.0
+offset_top = 6.0
+offset_right = -152.0
+offset_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="c_mult_10" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_du3sk")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 156.0
+offset_top = 6.0
+offset_right = 196.0
+offset_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="c_mult_1" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_c2qyv")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 188.0
+offset_top = 6.0
+offset_right = 228.0
+offset_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="1000000" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_n2uq6")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -117.0
+offset_top = 6.0
+offset_right = -77.0
+offset_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="100000" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_w8de3")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -85.0
+offset_top = 6.0
+offset_right = -45.0
+offset_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="10000" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_onfj2")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -53.0
+offset_top = 6.0
+offset_right = -13.0
+offset_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="1000" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_mvqdh")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -21.0
+offset_top = 6.0
+offset_right = 19.0
+offset_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="100" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_m2en8")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 11.0
+offset_top = 6.0
+offset_right = 51.0
+offset_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="10" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_tswex")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 43.0
+offset_top = 6.0
+offset_right = 83.0
+offset_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="1" type="ColorRect" parent="."]
+material = SubResource("ShaderMaterial_7ejb1")
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 75.0
+offset_top = 6.0
+offset_right = 115.0
+offset_bottom = 46.0
+grow_horizontal = 2
+grow_vertical = 2

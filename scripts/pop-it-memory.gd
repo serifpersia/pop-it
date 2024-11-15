@@ -236,7 +236,7 @@ func start_new_round() -> void:
 func update_light_colors() -> void:
 	for bubble_node in bubble_nodes:
 		var bubble_mesh_instance = bubble_node.get_child(0)
-		var omni_light = bubble_mesh_instance.get_child(0) as OmniLight3D
+		var omni_light = bubble_mesh_instance.get_child(1) as OmniLight3D
 		
 		if is_instance_valid(omni_light):
 			omni_light.light_color = Color.from_hsv(current_hue, 1, 1)
@@ -289,7 +289,7 @@ func light_up_bubble(index: int) -> void:
 	if not is_instance_valid(bubble_mesh_instance):
 		return
 
-	var omni_light = bubble_mesh_instance.get_child(0) as OmniLight3D
+	var omni_light = bubble_mesh_instance.get_child(1) as OmniLight3D
 	if not is_instance_valid(omni_light):
 		return
 
@@ -308,6 +308,11 @@ func player_light_up_bubble(index: int) -> void:
 
 	_handle_player_bubble_light_up(bubble_mesh_instance)
 
+
+func _unhandled_input(event: InputEvent) -> void:
+	if event is InputEventScreenTouch and event.pressed:
+		_handle_touch(event.position)
+	
 func _unhandled_key_input(event: InputEvent) -> void:
 	if game_over or is_showing_sequence or not can_input:
 		return
@@ -327,6 +332,9 @@ func _handle_key_press(index: int) -> void:
 	reset_key_states()
 
 	player_light_up_bubble(index)
+	
+	Input.vibrate_handheld(25, 0.45)
+	
 	play_memory_sound(index, bubble_nodes[index].position)
 	
 	var current_pos = player_sequence.size() - 1
@@ -378,7 +386,8 @@ func _handle_bubble_light_up(mesh: MeshInstance3D):
 	if not tween:
 		return
 		
-	var mesh_light = mesh.get_child(0)
+	var mesh_light = mesh.get_child(1)
+	print(mesh_light)
 	if not is_instance_valid(mesh_light):
 		return
 	
@@ -395,7 +404,7 @@ func _handle_player_bubble_light_up(mesh: MeshInstance3D):
 	if not tween:
 		return
 		
-	var mesh_light = mesh.get_child(0)
+	var mesh_light = mesh.get_child(1)
 	if not is_instance_valid(mesh_light):
 		return
 	
@@ -414,6 +423,31 @@ func remove_existing_lights() -> void:
 		var bubble_mesh: MeshInstance3D = bubble_nodes[bubble_idx]
 		var bubble_mesh_instance = bubble_mesh.get_child(0)
 		
-		var omni_light = bubble_mesh_instance.get_child(0) as OmniLight3D
+		var omni_light = bubble_mesh_instance.get_child(1) as OmniLight3D
 		if is_instance_valid(omni_light):
 			omni_light.light_energy = 0
+
+func _handle_touch(touch_position: Vector2) -> void:
+	var camera = get_viewport().get_camera_3d()
+	if camera:
+		var from = camera.project_ray_origin(touch_position)
+		var to = from + camera.project_ray_normal(touch_position) * 1000.0
+		
+		var space_state = get_world_3d().direct_space_state
+		var query = PhysicsRayQueryParameters3D.create(from, to)
+		var result = space_state.intersect_ray(query)
+		
+		if result:
+			var collider = result.collider
+			
+			if collider is StaticBody3D:
+				var parent_node = collider.get_parent()
+				
+				if parent_node is MeshInstance3D:
+					var grandparent_node = parent_node.get_parent()
+					
+					var grandparent_name = grandparent_node.name
+					var index = int(String(grandparent_name))
+					
+					if index > 0:
+						_handle_key_press(index - 1)

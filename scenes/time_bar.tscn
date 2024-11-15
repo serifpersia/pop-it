@@ -1,16 +1,18 @@
-[gd_scene load_steps=3 format=3 uid="uid://b20113doycxsj"]
+[gd_scene load_steps=2 format=3 uid="uid://b20113doycxsj"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_awu2x"]
-bg_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_642xr"]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_txumd"]
 bg_color = Color(1, 1, 1, 1)
 
-[node name="Time_Bar" type="ProgressBar"]
-offset_right = 495.0
-offset_bottom = 27.0
-theme_override_styles/background = SubResource("StyleBoxFlat_awu2x")
-theme_override_styles/fill = SubResource("StyleBoxFlat_642xr")
+[node name="Time_Bar" type="MarginContainer"]
+offset_right = 450.0
+offset_bottom = 100.0
+theme_override_constants/margin_left = 45
+theme_override_constants/margin_top = 45
+
+[node name="Time_Bar" type="ProgressBar" parent="."]
+layout_mode = 2
+size_flags_vertical = 1
+theme_override_styles/fill = SubResource("StyleBoxFlat_txumd")
 max_value = 60.0
 step = 0.1
 value = 60.0

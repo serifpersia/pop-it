@@ -1,13 +1,12 @@
-[gd_scene load_steps=5 format=3 uid="uid://cd1xoal1kwi3v"]
+[gd_scene load_steps=6 format=3 uid="uid://cd1xoal1kwi3v"]
 
 [ext_resource type="Script" path="res://scripts/main.gd" id="1_bebkt"]
+[ext_resource type="PackedScene" uid="uid://ht6hp7kn2utx" path="res://scenes/mobile_pause.tscn" id="2_3hbcv"]
 [ext_resource type="VoxelGIData" uid="uid://duv0f8j3c4w82" path="res://scenes/main/main.VoxelGI_data.res" id="2_nu58n"]
 [ext_resource type="PackedScene" uid="uid://bfsjym2svavnd" path="res://scenes/menu_scenes/pause_menu.tscn" id="3_tookn"]
 
 [sub_resource type="Environment" id="Environment_xu18t"]
 background_mode = 1
-background_color = Color(0.281187, 0.281187, 0.281187, 1)
-background_energy_multiplier = 0.25
 glow_enabled = true
 glow_bloom = 0.1
 glow_blend_mode = 1
@@ -15,13 +14,19 @@ glow_blend_mode = 1
 [node name="World" type="Node"]
 script = ExtResource("1_bebkt")
 
+[node name="Mobile_Pause" parent="." instance=ExtResource("2_3hbcv")]
+
 [node name="Pause" parent="." instance=ExtResource("3_tookn")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_xu18t")
 
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0.00412018, 0.869536, 0.806914)
+light_energy = 0.005
+
 [node name="Camera3D" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.258819, 0.965926, 0, -0.965926, 0.258819, 0, 1, 0.225)
+transform = Transform3D(1, 0, 0, 0, 0.258819, 0.965926, 0, -0.965926, 0.258819, 0, 0.715, 0.143)
 size = 1.5
 
 [node name="VoxelGI" type="VoxelGI" parent="."]

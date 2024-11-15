@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://borea6tx3cxpq"]
+[gd_scene load_steps=6 format=3 uid="uid://borea6tx3cxpq"]
 
 [ext_resource type="Script" path="res://scripts/bgm_control.gd" id="1_ijwxh"]
+[ext_resource type="PackedScene" uid="uid://dceaa3fvt7vsw" path="res://scenes/combo_label.tscn" id="2_808lv"]
 [ext_resource type="PackedScene" uid="uid://dqo2dmq5e7cdq" path="res://models/pop-it-3d.blend" id="3_ss3hy"]
 [ext_resource type="Script" path="res://scripts/popit-fidget.gd" id="4_qonqp"]
 [ext_resource type="Material" uid="uid://biid58nhbbja7" path="res://materials/Material.tres" id="5_8e7or"]
@@ -10,17 +11,7 @@ script = ExtResource("1_ijwxh")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="Combo_Label" type="Label" parent="CanvasLayer"]
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -109.0
-offset_top = 143.2
-offset_right = 109.0
-offset_bottom = 219.2
-grow_horizontal = 2
-theme_override_font_sizes/font_size = 55
-horizontal_alignment = 1
+[node name="Combo_Label" parent="CanvasLayer" instance=ExtResource("2_808lv")]
 
 [node name="pop-it-3d" parent="." instance=ExtResource("3_ss3hy")]
 script = ExtResource("4_qonqp")

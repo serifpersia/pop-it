@@ -45,33 +45,36 @@ alignment = 1
 
 [node name="Label" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 128
 text = "Game Completed!"
 
 [node name="Score" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 48
 text = "Score:"
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Time" type="Label" parent="MarginContainer/HBoxContainer/VBoxContainer"]
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 48
 text = "Time: "
 horizontal_alignment = 1
 vertical_alignment = 1
 
 [node name="Restart" parent="MarginContainer/HBoxContainer/VBoxContainer" instance=ExtResource("2_732cx")]
 layout_mode = 2
+theme_override_font_sizes/font_size = 64
 text = "Restart"
 
 [node name="GameModeSelect" parent="MarginContainer/HBoxContainer/VBoxContainer" instance=ExtResource("2_732cx")]
 layout_mode = 2
+theme_override_font_sizes/font_size = 64
 text = "Game Mode Select"
 
 [node name="MainMenu" parent="MarginContainer/HBoxContainer/VBoxContainer" instance=ExtResource("2_732cx")]
 layout_mode = 2
+theme_override_font_sizes/font_size = 86
 text = "Main Menu
 "
 

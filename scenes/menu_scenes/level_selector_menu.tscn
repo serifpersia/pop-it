@@ -25,7 +25,7 @@ anchor_right = 0.5
 offset_top = 32.0
 grow_horizontal = 2
 theme_override_fonts/font = SubResource("SystemFont_ujoka")
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 128
 text = "Game Mode Selection"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -72,18 +72,22 @@ theme_override_constants/v_separation = 12
 [node name="ArcadeMode" parent="HBoxContainer/HBoxContainer/ScrollContainer/GridContainer/GridContainer" instance=ExtResource("2_wdxbo")]
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 86
 text = "Arcade"
 
 [node name="ArcadePlusMode" parent="HBoxContainer/HBoxContainer/ScrollContainer/GridContainer/GridContainer" instance=ExtResource("2_wdxbo")]
 layout_mode = 2
+theme_override_font_sizes/font_size = 86
 text = "Arcade+"
 
 [node name="MemoryMode" parent="HBoxContainer/HBoxContainer/ScrollContainer/GridContainer/GridContainer" instance=ExtResource("2_wdxbo")]
 layout_mode = 2
+theme_override_font_sizes/font_size = 86
 text = "Memory"
 
 [node name="FidgetMode" parent="HBoxContainer/HBoxContainer/ScrollContainer/GridContainer/GridContainer" instance=ExtResource("2_wdxbo")]
 layout_mode = 2
+theme_override_font_sizes/font_size = 86
 text = "Fidget"
 
 [node name="MainMenu" parent="." instance=ExtResource("2_wdxbo")]
@@ -98,6 +102,7 @@ offset_right = 76.0
 offset_bottom = -16.0
 grow_horizontal = 2
 grow_vertical = 0
+theme_override_font_sizes/font_size = 86
 text = "Main Menu"
 
 [connection signal="timeout" from="Timer" to="." method="_on_timer_timeout"]

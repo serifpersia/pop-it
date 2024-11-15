@@ -39,7 +39,7 @@ layout_mode = 2
 [node name="Game Title" type="Label" parent="MarginContainer/VBoxContainer"]
 layout_mode = 2
 theme_override_fonts/font = SubResource("SystemFont_ujoka")
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 128
 text = "pop it!"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -58,18 +58,22 @@ layout_mode = 2
 
 [node name="Play" parent="MarginContainer/HBoxContainer/VBoxContainer" instance=ExtResource("3_phbaw")]
 layout_mode = 2
+theme_override_font_sizes/font_size = 86
 text = "Play"
 
 [node name="Options" parent="MarginContainer/HBoxContainer/VBoxContainer" instance=ExtResource("3_phbaw")]
 layout_mode = 2
+theme_override_font_sizes/font_size = 86
 text = "Options"
 
 [node name="Controls" parent="MarginContainer/HBoxContainer/VBoxContainer" instance=ExtResource("3_phbaw")]
 layout_mode = 2
+theme_override_font_sizes/font_size = 86
 text = "Controls"
 
 [node name="Quit" parent="MarginContainer/HBoxContainer/VBoxContainer" instance=ExtResource("3_phbaw")]
 layout_mode = 2
+theme_override_font_sizes/font_size = 86
 text = "Quit"
 
 [node name="btn_click" parent="." instance=ExtResource("4_xuhxx")]

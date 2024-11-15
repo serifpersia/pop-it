@@ -14,8 +14,10 @@ func _ready():
 		print("Discord RPC plugin not installed. Skipping Discord integration.")
 
 func _process(_delta):
-	if Global.game_mode_selected != last_game_mode_selected:
-		update_discord_status()
+	if GDExtensionManager.is_extension_loaded("res://addons/discord-rpc-gd/bin/discord-rpc-gd.gdextension"):
+	
+		if Global.game_mode_selected != last_game_mode_selected:
+			update_discord_status()
 
 func update_discord_status():
 	if Engine.has_singleton("DiscordRPC"):

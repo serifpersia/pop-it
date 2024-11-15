@@ -10,3 +10,5 @@ func _ready():
 			AudioPlayer.play_bgm_memory()
 		"popit_fidget":
 			AudioPlayer.play_bgm_fidget()
+			
+	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
